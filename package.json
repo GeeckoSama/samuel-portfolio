@@ -46,6 +46,8 @@
   "dependencies": {
     "@modular-forms/qwik": "^0.23.1",
     "@qwikest/icons": "^0.0.13",
+    "@supabase/supabase-js": "^2.39.7",
+    "supabase-auth-helpers-qwik": "^0.0.3",
     "valibot": "^0.29.0"
   }
 }
