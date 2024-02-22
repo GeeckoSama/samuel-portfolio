@@ -3,6 +3,7 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import type { RequestHandler } from "@builder.io/qwik-city";
 
 import styles from "./styles.css?inline";
+import { Navbar } from "~/components/Navbar/Navbar";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -25,7 +26,8 @@ export default component$(() => {
   useStyles$(styles);
   return (
     <>
-      <main>
+      <Navbar />
+      <main class="bg-gray-200 dark:bg-gray-950 min-h-screen mt-14 py-4">
         <Slot />
       </main>
     </>
