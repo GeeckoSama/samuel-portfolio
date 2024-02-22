@@ -28,15 +28,15 @@
     "@builder.io/qwik": "^1.4.5",
     "@builder.io/qwik-city": "^1.4.5",
     "@types/eslint": "^8.56.2",
-    "@types/node": "^20.11.6",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
+    "@types/node": "^20.11.19",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.56.0",
     "eslint-plugin-qwik": "^1.4.5",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "typescript": "5.3.3",
-    "undici": "*",
-    "vite": "^5.0.12",
-    "vite-tsconfig-paths": "^4.2.1"
+    "undici": "^6.6.2",
+    "vite": "^5.1.4",
+    "vite-tsconfig-paths": "^4.3.1"
   }
 }
