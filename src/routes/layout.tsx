@@ -4,6 +4,7 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 
 import styles from "./styles.css?inline";
 import { Navbar } from "~/components/Navbar/Navbar";
+import { AuthContext } from "~/components/AuthContext/AuthContext";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -26,10 +27,12 @@ export default component$(() => {
   useStyles$(styles);
   return (
     <>
-      <Navbar />
-      <main class="bg-gray-200 dark:bg-gray-950 min-h-screen mt-14 py-4">
-        <Slot />
-      </main>
+      <AuthContext>
+        <Navbar />
+        <main class="mt-14 min-h-screen bg-gray-200 py-4 dark:bg-gray-950">
+          <Slot />
+        </main>
+      </AuthContext>
     </>
   );
 });

@@ -1,9 +1,10 @@
-import { $, component$, type QRL } from "@builder.io/qwik";
+import type { QRL } from "@builder.io/qwik";
+import { $, component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { InitialValues, SubmitHandler } from "@modular-forms/qwik";
-import { formAction$, useForm, valiForm$ } from "@modular-forms/qwik";
-import { createServerClient } from "supabase-auth-helpers-qwik";
+import { useForm, valiForm$ } from "@modular-forms/qwik";
 import { email, minLength, object, string, type Input } from "valibot";
+import { supabase } from "~/lib/supabse";
 
 const LoginSchema = object({
   email: string([
@@ -23,53 +24,28 @@ export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
   password: "",
 }));
 
-export const useFormAction = formAction$<LoginForm>(
-  async (values, requestEv) => {
-    const supabaseClient = createServerClient(
-      requestEv.env.get("PUBLIC_SUPABASE_URL")!,
-      requestEv.env.get("PUBLIC_SUPABASE_ANON_KEY")!,
-      requestEv,
-    );
-    const response = await supabaseClient.auth.signInWithPassword({
-      email: values.email.toString(),
-      password: values.password.toString(),
-    });
-    console.log(response);
-    if (response.error) {
-      requestEv.fail(400, response.error);
-    }
-    if (response.data.session !== null) {
-      requestEv.cookie.set(
-        "sb-access-token",
-        response.data.session.access_token,
-        {
-          path: "/",
-          secure: true,
-          httpOnly: true,
-          sameSite: "strict",
-        },
-      );
-      requestEv.cookie.set(
-        "sb-refresh-token",
-        response.data.session.refresh_token,
-        { path: "/", secure: true, httpOnly: true, sameSite: "strict" },
-      );
-    }
-
-    requestEv.redirect(300, "/");
-  },
-  valiForm$(LoginSchema),
-);
-
 export default component$(() => {
   const [loginForm, { Form, Field }] = useForm<LoginForm>({
     loader: useFormLoader(),
-    action: useFormAction(),
     validate: valiForm$(LoginSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<LoginForm>> = $((values, event) => {
+  const handleSubmit: QRL<SubmitHandler<LoginForm>> = $(async (values) => {
+    if (loginForm.invalid) {
+      console.log("Form is invalid");
+      return;
+    }
     console.log(values);
+    const response = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
+    if (response.error) {
+      console.log(response.error);
+    }
+    if (response.data.session !== null) {
+      console.log("User is logged in");
+    }
   });
 
   return (
@@ -112,7 +88,8 @@ export default component$(() => {
         </Field>
         <button
           type="submit"
-          class="rounded-md bg-gray-700 p-2 font-semibold text-white"
+          class="rounded-md bg-gray-700 p-2 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-700"
+          disabled={loginForm.invalid || !loginForm.dirty}
         >
           Login
         </button>
