@@ -31,6 +31,7 @@ export const AuthContext = component$(() => {
     });
 
     return () => {
+      console.log("Unsubscribing from auth listener");
       authListener.unsubscribe();
     };
   });
