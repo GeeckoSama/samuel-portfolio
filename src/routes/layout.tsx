@@ -29,7 +29,7 @@ export default component$(() => {
     <>
       <AuthContext>
         <Navbar />
-        <main class="mt-14 min-h-screen bg-gray-200 py-4 dark:bg-gray-950">
+        <main class="bg-base-200">
           <Slot />
         </main>
       </AuthContext>

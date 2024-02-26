@@ -5,3 +5,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-inverted {
+  filter: invert(0);
+  mix-blend-mode: difference;
+}
