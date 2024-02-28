@@ -1,6 +1,7 @@
 import { component$, useContext, $ } from "@builder.io/qwik";
 import { UserContext } from "../AuthContext/AuthContext";
 import { supabase } from "~/lib/supabse";
+import { Link } from "@builder.io/qwik-city";
 
 export const AdminNavbar = component$(() => {
   const user = useContext(UserContext);
@@ -34,10 +35,10 @@ export const AdminNavbar = component$(() => {
             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a href="#">Photos</a>
+              <Link href="/photos">Photos</Link>
             </li>
             <li>
-              <a href="#">Vidéos</a>
+              <Link href="/videos">Vidéos</Link>
             </li>
             <li>
               <a href="#">About</a>
@@ -52,10 +53,10 @@ export const AdminNavbar = component$(() => {
         {user.value && (
           <ul class="menu menu-horizontal px-1">
             <li>
-              <a href="#">Photos</a>
+              <Link href="/admin/photos">Photos</Link>
             </li>
             <li>
-              <a href="#">Vidéos</a>
+              <Link href="/admin/videos">Vidéos</Link>
             </li>
             <li>
               <a href="#">About</a>
