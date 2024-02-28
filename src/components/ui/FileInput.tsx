@@ -33,6 +33,20 @@ type FileInputProps = {
  * File input field that users can click or drag files into. Various
  * decorations can be displayed in or around the field to communicate the entry
  * requirements.
+ *
+ * @param props - File input properties
+ * @param props.label - Label to display next to the file input
+ * @param props.error - Error message to display if the file input is invalid
+ * @param props.name - Name of the file input
+ * @param props.required - Whether the file input is required
+ * @param props.ref - Reference to the file input element
+ * @param props.value - Value of the file input
+ * @param props.onInput$ - Event handler for the input event
+ * @param props.onChange$ - Event handler for the change event
+ * @param props.onBlur$ - Event handler for the blur event
+ * @param props.accept - File types that the file input accepts
+ * @param props.multiple - Whether the file input accepts multiple files
+ * @returns File input component
  */
 export const FileInput = component$(
   ({ value, label, error, ...props }: FileInputProps) => {

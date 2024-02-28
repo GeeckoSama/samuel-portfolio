@@ -1,18 +1,16 @@
-import { component$, type QRL, useSignal, useTask$ } from "@builder.io/qwik";
+import { component$, type QRL } from "@builder.io/qwik";
 import { InputError } from "./InputError";
 import { InputLabel } from "./InputLabel";
 
 type TextInputProps = {
-  ref: QRL<(element: HTMLInputElement) => void>;
-  type: "text" | "email" | "tel" | "password" | "url" | "number" | "date";
+  ref: QRL<(element: HTMLTextAreaElement) => void>;
   name: string;
-  value: string | number | undefined;
-  onInput$: (event: Event, element: HTMLInputElement) => void;
-  onChange$: (event: Event, element: HTMLInputElement) => void;
-  onBlur$: (event: Event, element: HTMLInputElement) => void;
+  value: string | undefined;
+  onInput$: (event: Event, element: HTMLTextAreaElement) => void;
+  onChange$: (event: Event, element: HTMLTextAreaElement) => void;
+  onBlur$: (event: Event, element: HTMLTextAreaElement) => void;
   placeholder?: string;
   required?: boolean;
-  class?: string;
   label?: string;
   error?: string;
   form?: string;
@@ -33,29 +31,22 @@ type TextInputProps = {
  * @param props.onChange$ - Event handler for the change event
  * @param props.onBlur$ - Event handler for the blur event
  * @param props.placeholder - Placeholder text to display in the text input
- * @param props.type - Type of the text input
  * @returns Text input component
  */
-export const TextInput = component$(
+export const TextAreaInput = component$(
   ({ label, value, error, ...props }: TextInputProps) => {
     const { name, required } = props;
-    const input = useSignal<string | number>();
-    useTask$(({ track }) => {
-      if (!Number.isNaN(track(() => value))) {
-        input.value = value;
-      }
-    });
     return (
       <div class="form-control w-full max-w-xs">
         <InputLabel name={name} label={label} required={required} />
-        <input
+        <textarea
           {...props}
-          class="input input-bordered w-full max-w-xs"
+          class="textarea textarea-bordered w-full max-w-xs"
           id={name}
-          value={input.value}
+          value={value}
           aria-invalid={!!error}
           aria-errormessage={`${name}-error`}
-        />
+        ></textarea>
         <InputError name={name} error={error} />
       </div>
     );
