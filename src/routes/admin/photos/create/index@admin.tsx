@@ -1,14 +1,20 @@
-import type { NoSerialize } from "@builder.io/qwik";
-import { component$ } from "@builder.io/qwik";
+import type { NoSerialize, QRL } from "@builder.io/qwik";
+import { component$, $ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
+import type { SubmitHandler } from "@modular-forms/qwik";
 import {
   formAction$,
+  useForm,
   valiForm$,
   type InitialValues,
-  useForm,
 } from "@modular-forms/qwik";
+import { createServerClient } from "supabase-auth-helpers-qwik";
 import type { Input } from "valibot";
-import { array, minLength, object, optional, special, string } from "valibot";
+import { minLength, object, special, string } from "valibot";
+import { FileInput } from "~/components/ui/FileInput";
+import { TextInput } from "~/components/ui/TextInput";
+import type { Database } from "~/lib/schema";
+import { supabase } from "~/lib/supabse";
 
 const isFile = (input: unknown) => input instanceof File;
 
@@ -16,8 +22,7 @@ export const PhotoSchema = object({
   title: string([minLength(1, "Le titre est requis")]),
   description: string([minLength(1, "La description est requise")]),
   file: object({
-    list: array(special<NoSerialize<File>>(isFile)),
-    item: optional(special<NoSerialize<File>>(isFile)),
+    item: special<NoSerialize<File>>(isFile),
   }),
 });
 
@@ -27,14 +32,58 @@ export const useFormLoader = routeLoader$<InitialValues<PhotoForm>>(() => ({
   title: "",
   description: "",
   file: {
-    list: [],
     item: undefined,
   },
 }));
 
-export const useFormAction = formAction$<PhotoForm>((values) => {
-  console.log("values", values);
-}, valiForm$(PhotoSchema));
+export const useFormAction = formAction$<PhotoForm>(
+  async (values, requestEvent) => {
+    try {
+      console.log("Start creating photo");
+      const supabaseClient = createServerClient<Database>(
+        requestEvent.env.get("PUBLIC_SUPABASE_URL")!,
+        requestEvent.env.get("PUBLIC_SUPABASE_ANON_KEY")!,
+        requestEvent,
+      );
+
+      const file = values.file.item;
+      if (!file) {
+        throw new Error("No file");
+      }
+
+      const uploadedFile = await supabaseClient.storage
+        .from("medias")
+        .upload("photos/" + file.name + "." + file.type, file!);
+      if (uploadedFile.error) {
+        throw uploadedFile.error;
+      }
+      const urlFile = await supabaseClient.storage
+        .from("medias")
+        .createSignedUrl(uploadedFile.data.path, 60);
+      if (urlFile.error) {
+        throw urlFile.error;
+      }
+
+      const result = await supabaseClient.from("photos").insert([
+        {
+          title: values.title,
+          description: values.description,
+          photo_url: urlFile.data.signedUrl,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ]);
+      if (result.error) {
+        throw result.error;
+      }
+      console.log("Photo created", result.status);
+      requestEvent.redirect(300, "/admin/photos");
+    } catch (error) {
+      console.error("Error uploading file", error);
+    }
+  },
+  valiForm$(PhotoSchema),
+);
 
 export default component$(() => {
   const [photoForm, { Form, Field }] = useForm<PhotoForm>({
@@ -42,14 +91,56 @@ export default component$(() => {
     action: useFormAction(),
     validate: valiForm$(PhotoSchema),
   });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSubmit: QRL<SubmitHandler<PhotoForm>> = $(async (values) => {
+    try {
+      console.log("Start creating photo");
+      console.log("values", values);
+      const file = values.file.item;
+      if (!file) {
+        throw new Error("No file");
+      }
+
+      const uploadedFile = await supabase.storage
+        .from("medias")
+        .upload("photos/" + file.name, file!);
+      console.log("uploadedFile", uploadedFile);
+      if (uploadedFile.error) {
+        throw uploadedFile.error;
+      }
+      const urlFile = await supabase.storage
+        .from("medias")
+        .getPublicUrl(uploadedFile.data.path, { download: values.title });
+      console.log("urlFile", urlFile);
+
+      const result = await supabase.from("photos").insert([
+        {
+          title: values.title,
+          description: values.description,
+          url: urlFile.data.publicUrl,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ]);
+      console.log("result", result);
+      if (result.error) {
+        throw result.error;
+      }
+      console.log("Photo created", result.status);
+    } catch (error) {
+      console.error("Error uploading file", error);
+    }
+  });
+
   return (
     <div class="card mx-auto max-w-xl bg-base-100 shadow-md">
       <div class="card-body">
         <h2 class="card-title">Créer une photo</h2>
-        <Form class="flex flex-col gap-2">
+        <Form onSubmit$={handleSubmit} class="flex flex-col gap-2">
           <Field name="title">
             {(field, props) => (
-              <input
+              <TextInput
                 class="input input-bordered w-full"
                 {...props}
                 type="text"
@@ -68,17 +159,13 @@ export default component$(() => {
           </Field>
           <Field name="file.item" type="File">
             {(field, props) => (
-              <input
-                class="file-input file-input-bordered w-full"
-                multiple={false}
-                accept="image/*"
-                {...props}
-                type="file"
-                value={field.value}
-              />
+              <FileInput {...props} value={field.value} accept="image/*" />
             )}
           </Field>
           <button type="submit" class="btn btn-primary">
+            {photoForm.submitting && (
+              <span class="loading loading-spinner"></span>
+            )}
             submit
           </button>
         </Form>

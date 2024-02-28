@@ -1,0 +1,64 @@
+import {
+  component$,
+  type NoSerialize,
+  type QRL,
+  useSignal,
+  useTask$,
+} from "@builder.io/qwik";
+import { InputLabel } from "./InputLabel";
+import { InputError } from "./InputError";
+
+type FileInputProps = {
+  ref: QRL<(element: HTMLInputElement) => void>;
+  name: string;
+  value:
+    | NoSerialize<Blob>
+    | NoSerialize<Blob>[]
+    | NoSerialize<File>
+    | NoSerialize<File>[]
+    | null
+    | undefined;
+  onInput$: (event: Event, element: HTMLInputElement) => void;
+  onChange$: (event: Event, element: HTMLInputElement) => void;
+  onBlur$: (event: Event, element: HTMLInputElement) => void;
+  accept?: string;
+  required?: boolean;
+  multiple?: boolean;
+  class?: string;
+  label?: string;
+  error?: string;
+};
+
+/**
+ * File input field that users can click or drag files into. Various
+ * decorations can be displayed in or around the field to communicate the entry
+ * requirements.
+ */
+export const FileInput = component$(
+  ({ value, label, error, ...props }: FileInputProps) => {
+    const { name, required } = props;
+
+    // Create computed value of selected files
+    const files = useSignal<NoSerialize<Blob>[] | NoSerialize<File>[]>();
+    useTask$(({ track }) => {
+      track(() => value);
+      files.value = value ? (Array.isArray(value) ? value : [value]) : [];
+    });
+
+    return (
+      <div>
+        <InputLabel name={name} label={label} required={required} />
+        <input
+          {...props}
+          class="file-input file-input-bordered w-full"
+          type="file"
+          id={name}
+          aria-invalid={!!error}
+          aria-errormessage={`${name}-error`}
+        />
+
+        <InputError name={name} error={error} />
+      </div>
+    );
+  },
+);
