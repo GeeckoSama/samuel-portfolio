@@ -1,10 +1,9 @@
 import { component$, Slot, useStyles$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
 import type { RequestHandler } from "@builder.io/qwik-city";
+import { routeLoader$ } from "@builder.io/qwik-city";
 
-import styles from "./styles.css?inline";
 import { Navbar } from "~/components/Navbar/Navbar";
-import { AuthContext } from "~/components/AuthContext/AuthContext";
+import styles from "./styles.css?inline";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -27,12 +26,10 @@ export default component$(() => {
   useStyles$(styles);
   return (
     <>
-      <AuthContext>
-        <Navbar />
-        <main class="bg-base-200">
-          <Slot />
-        </main>
-      </AuthContext>
+      <Navbar />
+      <main class="bg-base-200">
+        <Slot />
+      </main>
     </>
   );
 });

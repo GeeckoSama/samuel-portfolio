@@ -7,6 +7,7 @@ import {
 import { RouterHead } from "./components/router-head/router-head";
 
 import "./global.css";
+import { AuthContext } from "./components/AuthContext/AuthContext";
 
 export default component$(() => {
   /**
@@ -25,7 +26,9 @@ export default component$(() => {
         <ServiceWorkerRegister />
       </head>
       <body lang="en">
-        <RouterOutlet />
+        <AuthContext>
+          <RouterOutlet />
+        </AuthContext>
       </body>
     </QwikCityProvider>
   );
