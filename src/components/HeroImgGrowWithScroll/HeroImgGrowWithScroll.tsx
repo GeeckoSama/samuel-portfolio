@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GlyphText } from "../ui/GlyphText";
@@ -13,17 +13,17 @@ export interface HeroImgGrowWithScrollProps {
 
 export const HeroImgGrowWithScroll = component$<HeroImgGrowWithScrollProps>(
   (props) => {
+    const isMobile = useSignal<boolean>(false);
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
+      isMobile.value = window.innerWidth < 768;
       gsap.registerPlugin(ScrollTrigger);
       ScrollTrigger.create({
         trigger: "#hero-img-grow",
         start: "top top",
         end: "bottom 50%+=1080px",
-        onToggle: (self) => console.log("toggled, isActive:", self.isActive),
         onUpdate: (self) => {
           const scale = (Math.floor(self.progress * 100) + 10) / 100;
-          console.log(scale > 1 ? 1 : scale);
           gsap.to("img", {
             transform: `scale(${scale > 1 ? 1 : scale})`,
           });
@@ -40,8 +40,12 @@ export const HeroImgGrowWithScroll = component$<HeroImgGrowWithScrollProps>(
           height={props.imgHeight}
           width={props.imgWidth}
         />
-        <h2 class="invert-1 sticky bottom-[0vh] top-[50vh] ml-8 text-8xl font-black text-neutral-100 mix-blend-difference uppercase tracking-widest">
-          <GlyphText text={props.text} />
+        <h2 class="invert-1 sticky bottom-[0vh] top-[50vh] ml-8 text-8xl font-black uppercase tracking-widest text-neutral-100 mix-blend-difference">
+          {isMobile.value ? (
+            <h2>{props.text}</h2>
+          ) : (
+            <GlyphText text={props.text} />
+          )}
         </h2>
       </div>
     );
