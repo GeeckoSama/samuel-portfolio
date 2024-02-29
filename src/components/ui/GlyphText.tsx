@@ -25,6 +25,7 @@ export const GlyphText = component$<GlichedTextProps>((props) => {
 
   const GLYPHS =
     "ラドクリフマラソンわたしワタシんょンョたばこタバコとうきょうトウキョウ";
+  const randomChar = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 
   return (
     <div
@@ -39,15 +40,9 @@ export const GlyphText = component$<GlichedTextProps>((props) => {
             data-char={char}
             style={{
               "--index": index,
-              "--char-1": `"${
-                GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
-              }"`,
-              "--char-2": `"${
-                GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
-              }"`,
-              "--char-3": `"${
-                GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
-              }"`,
+              "--char-1": `"${randomChar()}"`,
+              "--char-2": `"${randomChar()}"`,
+              "--char-3": `"${randomChar()}"`,
             }}
           >
             {char}
