@@ -7,7 +7,7 @@ import type { Input } from "valibot";
 import { minLength, number, object, optional, special, string } from "valibot";
 import { FileInput } from "~/components/ui/FileInput";
 import { TextInput } from "~/components/ui/TextInput";
-import { supabase, supabaseServer } from "~/lib/supabase";
+import { supabaseClient, supabaseServer } from "~/lib/supabase";
 
 const isFile = (input: unknown) => input instanceof File;
 
@@ -58,6 +58,7 @@ export default component$(() => {
 
   const handleSubmit: QRL<SubmitHandler<PhotoEditForm>> = $(async (values) => {
     try {
+      const supabase = supabaseClient();
       console.log("Start creating photo");
       console.log("values", values);
       const file = values.file.item;
