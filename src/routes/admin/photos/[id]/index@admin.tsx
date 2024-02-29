@@ -3,13 +3,11 @@ import { $, component$ } from "@builder.io/qwik";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import type { SubmitHandler } from "@modular-forms/qwik";
 import { useForm, valiForm$, type InitialValues } from "@modular-forms/qwik";
-import { createServerClient } from "supabase-auth-helpers-qwik";
 import type { Input } from "valibot";
 import { minLength, number, object, optional, special, string } from "valibot";
 import { FileInput } from "~/components/ui/FileInput";
 import { TextInput } from "~/components/ui/TextInput";
-import type { Database } from "~/lib/schema";
-import { supabase } from "~/lib/supabase";
+import { supabase, supabaseServer } from "~/lib/supabase";
 
 const isFile = (input: unknown) => input instanceof File;
 
@@ -26,11 +24,7 @@ export const PhotoEditSchema = object({
 export type PhotoEditForm = Input<typeof PhotoEditSchema>;
 
 export const useFormLoader = routeLoader$(async (requestEvent) => {
-  const supabaseClient = createServerClient<Database>(
-    requestEvent.env.get("PUBLIC_SUPABASE_URL")!,
-    requestEvent.env.get("PUBLIC_SUPABASE_ANON_KEY")!,
-    requestEvent,
-  );
+  const supabaseClient = supabaseServer(requestEvent);
   const id = +requestEvent.params.id;
   if (!id) {
     throw new Error("id is required");

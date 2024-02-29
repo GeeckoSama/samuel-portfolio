@@ -1,16 +1,11 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import { createServerClient } from "supabase-auth-helpers-qwik";
 import { Table } from "~/components/table/table";
-import type { Database } from "~/lib/schema";
+import { supabaseServer } from "~/lib/supabase";
 import type { Photos } from "~/types/photo";
 
 export const usePhotos = routeLoader$(async (requestEvent) => {
-  const supabaseClient = createServerClient<Database>(
-    requestEvent.env.get("PUBLIC_SUPABASE_URL")!,
-    requestEvent.env.get("PUBLIC_SUPABASE_ANON_KEY")!,
-    requestEvent,
-  );
+  const supabaseClient = supabaseServer(requestEvent);
   return await supabaseClient.from("photos").select("*");
 });
 

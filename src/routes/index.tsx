@@ -1,8 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { createServerClient } from "supabase-auth-helpers-qwik";
 import { Hero } from "~/components/hero/hero";
-import type { Database } from "~/lib/schema";
+import { supabaseServer } from "~/lib/supabase";
 
 export interface Photo {
   id: number;
@@ -14,11 +13,7 @@ export interface Photo {
 }
 
 export const usePhotos = routeLoader$(async (requestEvent) => {
-  const supabaseClient = createServerClient<Database>(
-    requestEvent.env.get("PUBLIC_SUPABASE_URL")!,
-    requestEvent.env.get("PUBLIC_SUPABASE_ANON_KEY")!,
-    requestEvent,
-  );
+  const supabaseClient = supabaseServer(requestEvent);
   return await supabaseClient.from("photos").select("*");
 });
 
