@@ -1,13 +1,13 @@
 import { component$, useContext, $ } from "@builder.io/qwik";
 import { UserContext } from "../AuthContext/AuthContext";
-import { supabase } from "~/lib/supabase";
+import { supabaseClient } from "~/lib/supabase";
 import { Link } from "@builder.io/qwik-city";
 
 export const AdminNavbar = component$(() => {
   const user = useContext(UserContext);
 
   const handleSignOut = $(() => {
-    supabase.auth.signOut();
+    supabaseClient().auth.signOut();
   });
 
   return (

@@ -1,6 +1,6 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { email, minLength, object, parse, string } from "valibot";
-import { supabase } from "~/lib/supabase";
+import { supabaseClient } from "~/lib/supabase";
 
 const LoginSchema = object({
   email: string([
@@ -26,7 +26,7 @@ export const Sigin = component$(() => {
         password: password.value,
       });
 
-      const response = await supabase.auth.signInWithPassword({
+      const response = await supabaseClient().auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
