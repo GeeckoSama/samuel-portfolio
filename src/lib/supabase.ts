@@ -4,8 +4,8 @@ import { RequestEvent, RequestEventAction, RequestEventLoader } from "@builder.i
 import { createServerClient } from "supabase-auth-helpers-qwik";
 
 export const supabaseClient = () => {
-  const supabase_url = import.meta.env.get("PUBLIC_SUPABASE_URL");
-  const supabase_anon_key = import.meta.env.get("PUBLIC_SUPABASE_ANON_KEY");
+  const supabase_url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const supabase_anon_key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
   if (!supabase_url || !supabase_anon_key) {
     throw new Error("Missing supabase url or anon key on client");
   }
