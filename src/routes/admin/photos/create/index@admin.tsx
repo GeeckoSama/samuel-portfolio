@@ -14,7 +14,7 @@ import { minLength, object, special, string } from "valibot";
 import { FileInput } from "~/components/ui/FileInput";
 import { TextInput } from "~/components/ui/TextInput";
 import type { Database } from "~/lib/schema";
-import { supabase } from "~/lib/supabse";
+import { supabase } from "~/lib/supabase";
 
 const isFile = (input: unknown) => input instanceof File;
 

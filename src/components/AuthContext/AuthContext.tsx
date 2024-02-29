@@ -8,7 +8,7 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import type { User } from "supabase-auth-helpers-qwik";
-import { supabase } from "~/lib/supabse";
+import { supabase } from "~/lib/supabase";
 
 export const UserContext =
   createContextId<Signal<User | null>>("auth.user-context");

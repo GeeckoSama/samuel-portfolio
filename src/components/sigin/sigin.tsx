@@ -1,6 +1,6 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { email, minLength, object, parse, string } from "valibot";
-import { supabase } from "~/lib/supabse";
+import { supabase } from "~/lib/supabase";
 
 const LoginSchema = object({
   email: string([
