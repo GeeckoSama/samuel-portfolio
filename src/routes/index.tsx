@@ -23,7 +23,7 @@ export const usePhotos = routeLoader$(async (requestEvent) => {
 });
 
 export default component$(() => {
-  const signal = usePhotos();
+  //const signal = usePhotos();
   return (
     <>
       <Hero />

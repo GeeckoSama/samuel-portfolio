@@ -3,7 +3,7 @@ import { Link } from "@builder.io/qwik-city";
 import type { Photos, Videos } from "~/types/photo";
 import { HiPencilSquareSolid, HiPlusSolid } from "@qwikest/icons/heroicons";
 
-export const Table = component$<{data: Photos | Videos}>((props) => {
+export const Table = component$<{ data: Photos | Videos }>((props) => {
   return (
     <div class="overflow-x-auto">
       <table class="table">
@@ -12,14 +12,23 @@ export const Table = component$<{data: Photos | Videos}>((props) => {
             <th>Média</th>
             <th>Titre</th>
             <th>Description</th>
-            <th><Link href="./create" class="btn btn-ghost"><HiPlusSolid class="h-6 w-6" /></Link></th>
+            <th>
+              <Link href="./create" class="btn btn-ghost">
+                <HiPlusSolid class="h-6 w-6" />
+              </Link>
+            </th>
           </tr>
         </thead>
         <tbody>
           {props.data.map((item) => (
             <tr key={item.id}>
               <th>
-                <img src={item.url ?? ""} width={50} height={50} class="bg-base-300 rounded" />
+                <img
+                  src={item.url ?? ""}
+                  width={50}
+                  height={50}
+                  class="rounded bg-base-300"
+                />
               </th>
               <td>{item.title}</td>
               <td>{item.description}</td>

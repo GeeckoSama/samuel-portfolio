@@ -11,7 +11,7 @@ export const AdminNavbar = component$(() => {
   });
 
   return (
-    <div class="navbar bg-base-100 fixed top-0 shadow-lg z-50">
+    <div class="navbar fixed top-0 z-50 bg-base-100 shadow-lg">
       <div class="navbar-start">
         <div class="dropdown">
           <div tabIndex={0} role="button" class="btn btn-ghost lg:hidden">
@@ -32,7 +32,7 @@ export const AdminNavbar = component$(() => {
           </div>
           <ul
             tabIndex={0}
-            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
               <Link href="/photos">Photos</Link>

@@ -4,21 +4,21 @@ export default {
   theme: {
     extend: {
       fontSize: {
-        sm: '0.618rem',
-        base: '1rem',
-        xl: '1.618rem',
-        '2xl': '2.618rem',
-        '3xl': '4.236rem',
-        '4xl': '6.854rem',
-        '5xl': '11.090rem',
+        sm: "0.618rem",
+        base: "1rem",
+        xl: "1.618rem",
+        "2xl": "2.618rem",
+        "3xl": "4.236rem",
+        "4xl": "6.854rem",
+        "5xl": "11.090rem",
       },
       fontFamily: {
-        heading: 'Allerta Stencil',
-        body: 'Allerta',
+        heading: "Allerta Stencil",
+        body: "Allerta",
       },
       fontWeight: {
-        normal: '400',
-        bold: '700',
+        normal: "400",
+        bold: "700",
       },
     },
   },

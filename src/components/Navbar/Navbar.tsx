@@ -1,12 +1,8 @@
-import { component$, useContext } from "@builder.io/qwik";
-import { UserContext } from "../AuthContext/AuthContext";
+import { component$ } from "@builder.io/qwik";
 
-export interface NavbarProps {}
-
-export const Navbar = component$<NavbarProps>((props) => {
-  const user = useContext(UserContext);
+export const Navbar = component$(() => {
   return (
-    <div class="navbar bg-transparent fixed top-0">
+    <div class="navbar fixed top-0 bg-transparent">
       <div class="navbar-start">
         <div class="dropdown">
           <div tabIndex={0} role="button" class="btn btn-ghost lg:hidden">
@@ -63,9 +59,7 @@ export const Navbar = component$<NavbarProps>((props) => {
           </li>
         </ul>
       </div>
-      <div class="navbar-end">
-        
-      </div>
+      <div class="navbar-end"></div>
     </div>
   );
 });

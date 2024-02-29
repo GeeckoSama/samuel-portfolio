@@ -1,8 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 
-export interface HeroProps {}
-
-export const Hero = component$<HeroProps>((props) => {
+export const Hero = component$(() => {
   return (
     <div
       class="hero min-h-screen"
@@ -11,7 +9,7 @@ export const Hero = component$<HeroProps>((props) => {
       <div class="hero-overlay bg-opacity-60"></div>
       <div class="hero-content text-center text-neutral-content">
         <div class="max-w-md">
-          <h1 class="font-heading mb-5 text-5xl font-bold uppercase text-inverted">
+          <h1 class="text-inverted mb-5 font-heading text-5xl font-bold uppercase">
             Hello there
           </h1>
           <p class="mb-5">
