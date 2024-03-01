@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { GlyphText } from "../ui/GlyphText";
+import Image from "../../media/logo.png?jsx";
 
 export const Navbar = component$(() => {
   return (
@@ -42,7 +43,7 @@ export const Navbar = component$(() => {
           </ul>
         </div>
         <a href="#" class="btn btn-ghost text-xl">
-          logo
+          <Image class="w-auto h-12 mix-blend-difference" alt="logo" />
         </a>
       </div>
       <div class="navbar-end hidden lg:flex">
