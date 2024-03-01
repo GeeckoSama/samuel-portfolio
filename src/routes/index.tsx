@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { HeroImgGrowWithScroll } from "~/components/HeroImgGrowWithScroll/HeroImgGrowWithScroll";
+import { ImageSlideGallery } from "~/components/ImageSlideGallery/ImageSlideGallery";
 /* import { HeroParallaxScroll } from "~/components/HeroParallaxScroll/HeroParallaxScroll"; */
 import { supabaseServer } from "~/lib/supabase";
 
@@ -22,10 +23,7 @@ export default component$(() => {
   //const signal = usePhotos();
   return (
     <>
-      <HeroImgGrowWithScroll
-        imgAlt="a picture"
-        text="samuel freret"
-      />
+      <HeroImgGrowWithScroll imgAlt="a picture" text="samuel freret" />
       {/* <HeroParallaxScroll
         title="Titre"
         word="lorem"
@@ -35,6 +33,31 @@ export default component$(() => {
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
         ]}
       /> */}
+      <ImageSlideGallery
+        projects={[
+          {
+            title1: "Super",
+            title2: "Test",
+            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+          },
+          {
+            title1: "Super",
+            title2: "Test",
+            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+          },
+          {
+            title1: "Super",
+            title2: "Test",
+            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+          },
+          {
+            title1: "Super",
+            title2: "Test",
+            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+          },
+        ]}
+        sectionTitle="Projets vidéos"
+      />
     </>
   );
 });
