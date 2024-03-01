@@ -4,6 +4,7 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from './HeroParallaxScroll.module.css'
 
 export interface HeroParallaxScrollProps {
@@ -21,6 +22,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
 
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
+      gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
         const tl = gsap
           .timeline({

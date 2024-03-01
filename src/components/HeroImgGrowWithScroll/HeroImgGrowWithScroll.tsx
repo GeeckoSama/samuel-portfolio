@@ -22,6 +22,7 @@ export const HeroImgGrowWithScroll = component$<HeroImgGrowWithScrollProps>(
         trigger: "#hero-img-grow",
         start: "top top",
         end: "bottom 50%+=1080px",
+        scrub: true,
         onUpdate: (self) => {
           const scale = (Math.floor(self.progress * 100) + 10) / 100;
           gsap.to("img", {
