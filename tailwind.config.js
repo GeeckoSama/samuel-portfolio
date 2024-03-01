@@ -12,10 +12,6 @@ export default {
         "4xl": "6.854rem",
         "5xl": "11.090rem",
       },
-      fontFamily: {
-        heading: "Allerta Stencil",
-        body: "Allerta",
-      },
       fontWeight: {
         normal: "400",
         bold: "700",

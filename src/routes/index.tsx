@@ -2,7 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { HeroImgGrowWithScroll } from "~/components/HeroImgGrowWithScroll/HeroImgGrowWithScroll";
 import { ImageSlideGallery } from "~/components/ImageSlideGallery/ImageSlideGallery";
-/* import { HeroParallaxScroll } from "~/components/HeroParallaxScroll/HeroParallaxScroll"; */
+import { HeroParallaxScroll } from "~/components/HeroParallaxScroll/HeroParallaxScroll";
 import { supabaseServer } from "~/lib/supabase";
 
 export interface Photo {
@@ -24,7 +24,7 @@ export default component$(() => {
   return (
     <>
       <HeroImgGrowWithScroll imgAlt="a picture" text="samuel freret" />
-      {/* <HeroParallaxScroll
+      <HeroParallaxScroll
         title="Titre"
         word="lorem"
         images={[
@@ -32,7 +32,7 @@ export default component$(() => {
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
         ]}
-      /> */}
+      />
       <ImageSlideGallery
         projects={[
           {
