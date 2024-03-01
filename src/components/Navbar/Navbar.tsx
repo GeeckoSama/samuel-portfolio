@@ -29,9 +29,6 @@ export const Navbar = component$(() => {
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
-              <a href="#">About</a>
-            </li>
-            <li>
               <a href="#">Photos</a>
             </li>
             <li>
@@ -43,16 +40,11 @@ export const Navbar = component$(() => {
           </ul>
         </div>
         <a href="#" class="btn btn-ghost text-xl">
-          <Image class="w-auto h-12 mix-blend-difference" alt="logo" />
+          <Image class="h-12 w-auto mix-blend-difference" alt="logo" />
         </a>
       </div>
       <div class="navbar-end hidden lg:flex">
         <ul class="menu menu-horizontal menu-lg px-1 ">
-          <li>
-            <Link href="#">
-              <GlyphText text="About" />
-            </Link>
-          </li>
           <li>
             <Link href="#">
               <GlyphText text="Photos" />
