@@ -1,8 +1,10 @@
 import { component$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
+import { GlyphText } from "../ui/GlyphText";
 
 export const Navbar = component$(() => {
   return (
-    <div class="navbar fixed top-0 bg-transparent">
+    <div class="bg-base-transparent navbar fixed top-0 z-50 mix-blend-difference">
       <div class="navbar-start">
         <div class="dropdown">
           <div tabIndex={0} role="button" class="btn btn-ghost lg:hidden">
@@ -40,26 +42,33 @@ export const Navbar = component$(() => {
           </ul>
         </div>
         <a href="#" class="btn btn-ghost text-xl">
-          Samuel Freret
+          logo
         </a>
       </div>
-      <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1">
+      <div class="navbar-end hidden lg:flex">
+        <ul class="menu menu-horizontal menu-lg px-1 ">
           <li>
-            <a href="#">About</a>
+            <Link href="#">
+              <GlyphText text="About" />
+            </Link>
           </li>
           <li>
-            <a href="#">Photos</a>
+            <Link href="#">
+              <GlyphText text="Photos" />
+            </Link>
           </li>
           <li>
-            <a href="#">Vidéos</a>
+            <Link href="#">
+              <GlyphText text="Vidéos" />
+            </Link>
           </li>
           <li>
-            <a href="#">Contact</a>
+            <Link href="#">
+              <GlyphText text="Contact" />
+            </Link>
           </li>
         </ul>
       </div>
-      <div class="navbar-end"></div>
     </div>
   );
 });

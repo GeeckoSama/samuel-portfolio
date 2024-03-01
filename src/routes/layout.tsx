@@ -2,7 +2,7 @@ import { component$, Slot, useStyles$ } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 
-/* import { Navbar } from "~/components/Navbar/Navbar"; */
+import { Navbar } from "~/components/Navbar/Navbar";
 import styles from "./styles.css?inline";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -26,7 +26,7 @@ export default component$(() => {
   useStyles$(styles);
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <main class="bg-base-200">
         <Slot />
       </main>
