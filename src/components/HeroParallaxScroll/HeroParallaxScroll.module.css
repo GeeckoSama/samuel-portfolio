@@ -11,7 +11,6 @@
       text-transform: uppercase;
     }
     p {
-      color: white;
       margin: 0px;
       margin-top: 10px;
       font-size: 3vw;
@@ -34,7 +33,7 @@
       }
       &:nth-of-type(1) {
         height: 80vh;
-        width: 70vw;
+        width: 60vw;
         z-index: 1;
       }
       &:nth-of-type(2) {
