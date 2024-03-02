@@ -1,11 +1,10 @@
-import {
-  component$,
-  useSignal,
-  useVisibleTask$,
-} from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from './HeroParallaxScroll.module.css'
+import styles from "./HeroParallaxScroll.module.css";
+import Image1 from "../../media/paysage_1.jpg?jsx";
+import Image2 from "../../media/paysage_2.jpg?jsx";
+import Image3 from "../../media/paysage_3.jpg?jsx";
 
 export interface HeroParallaxScrollProps {
   title: string;
@@ -40,7 +39,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
           tl.to(
             letter,
             {
-              top: Math.floor(Math.random() * 75) + 25,
+              top: Math.floor(Math.random() * 85) + 25,
             },
             0,
           );
@@ -52,9 +51,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
     return (
       <div ref={containerRef} class={styles.container}>
         <div class={styles.body}>
-          <h1 ref={titleRef}>
-            {props.title}
-          </h1>
+          <h1 ref={titleRef}>{props.title}</h1>
           <div class={styles.word}>
             <p>
               {props.word.split("").map((letter, i) => {
@@ -73,7 +70,25 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
         </div>
 
         <div class={styles.images}>
-          {props.images.map((image, i) => {
+          <div
+            ref={(el) => (imagesRefs.value[0] = el)}
+            class={styles.imageContainer}
+          >
+            <Image1 />
+          </div>
+          <div
+            ref={(el) => (imagesRefs.value[1] = el)}
+            class={styles.imageContainer}
+          >
+            <Image2 />
+          </div>
+          <div
+            ref={(el) => (imagesRefs.value[2] = el)}
+            class={styles.imageContainer}
+          >
+            <Image3 />
+          </div>
+          {/* {props.images.map((image, i) => {
             return (
               <div
                 key={`i_${i}`}
@@ -83,7 +98,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
                 <img src={image} alt="image" />
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     );

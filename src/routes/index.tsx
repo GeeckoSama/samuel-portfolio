@@ -25,8 +25,8 @@ export default component$(() => {
     <>
       <HeroImgGrowWithScroll imgAlt="a picture" text="samuel freret" />
       <HeroParallaxScroll
-        title="Titre"
-        word="lorem"
+        title="Production photographique"
+        word="Paysage"
         images={[
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
