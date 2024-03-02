@@ -11,32 +11,45 @@ export interface HeroImgGrowWithScrollProps {
 
 export const HeroImgGrowWithScroll = component$<HeroImgGrowWithScrollProps>(
   (props) => {
+    const containerRef = useSignal<Element>();
+    const imageRef = useSignal<Element>();
     const isMobile = useSignal<boolean>(false);
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       isMobile.value = window.innerWidth < 768;
-      gsap.registerPlugin(ScrollTrigger);
-      ScrollTrigger.create({
-        trigger: "#hero-container-grow",
-        start: "top top",
-        end: "bottom 50%+=1080px",
-        scrub: true,
-        onUpdate: (self) => {
-          const scale = (Math.floor(self.progress * 100) + 10) / 100;
-          gsap.to("#hero-img-grow", {
-            transform: `scale(${scale > 1 ? 1 : scale})`,
-          });
-        },
+      if (isMobile.value) return;
+      const context = gsap.context(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: containerRef.value,
+              start: "top top",
+              end: "bottom top+=1080px",
+              scrub: true,
+            },
+          })
+          .fromTo(
+            imageRef.value!,
+            {
+              scale: 0.1,
+            },
+            {
+              scale: 1,
+            },
+          );
       });
+      return () => context.revert();
     });
 
     return (
-      <div id="hero-container-grow" class="h-[200vh] bg-base-100">
-        <Image id="hero-img-grow"
-          class="sticky top-0 h-[100vh] w-full scale-[0.1] object-contain object-center"
+      <div ref={containerRef} class="h-screen bg-base-100 lg:h-[200vh]">
+        <Image
+          ref={imageRef}
+          class="h-[100vh] w-full translate-x-1/4 object-contain object-center lg:sticky lg:top-0 lg:translate-x-0 lg:scale-[0.1]"
           alt={props.imgAlt}
         />
-        <h2 class="invert-1 sticky bottom-[0vh] top-[50vh] ml-8 text-8xl font-black uppercase tracking-widest text-neutral-100 mix-blend-difference">
+        <h2 class="invert-1 absolute top-[51vh] left-[-16vh] lg:sticky lg:bottom-[0vh] lg:top-[50vh] ml-8 -rotate-90 text-2xl font-black uppercase tracking-widest text-neutral-100 mix-blend-difference lg:rotate-0 lg:text-8xl">
           {isMobile.value ? (
             <h2>{props.text}</h2>
           ) : (
