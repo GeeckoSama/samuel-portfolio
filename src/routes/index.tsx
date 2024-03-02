@@ -36,27 +36,27 @@ export default component$(() => {
       <ImageSlideGallery
         projects={[
           {
-            title1: "Super",
-            title2: "Test",
-            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+            title1: "10000",
+            title2: "P",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
           },
           {
-            title1: "Super",
-            title2: "Test",
-            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+            title1: "BON",
+            title2: "EXPORT",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/bonexport_preview.png",
           },
           {
-            title1: "Super",
-            title2: "Test",
-            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+            title1: "Colgate &",
+            title2: "Hold up",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/colgate&holdup_preview.png",
           },
           {
-            title1: "Super",
-            title2: "Test",
-            src: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+            title1: "Interlude",
+            title2: "Prie",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/interlude_prie_preview.png",
           },
         ]}
-        sectionTitle="Projets vidéos"
+        sectionTitle="Clips vidéos"
       />
     </>
   );

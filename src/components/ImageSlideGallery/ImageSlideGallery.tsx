@@ -1,5 +1,6 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { gsap } from "gsap";
+import { GlyphText } from "../ui/GlyphText";
 
 export interface ImageSlideGalleryProps {
   projects: {
@@ -14,7 +15,7 @@ export const ImageSlideGallery = component$<ImageSlideGalleryProps>((props) => {
   return (
     <main class="flex h-screen content-center items-center bg-base-100">
       <div class="mx-auto w-[70%]">
-        <p>{props.sectionTitle}</p>
+        <div class="text-3xl font-bold uppercase mb-10"><GlyphText text={props.sectionTitle} /></div>
 
         {props.projects.map((project, i) => {
           return <Project key={i} project={project} />;
@@ -52,7 +53,7 @@ export const Project = component$<ProjectProps>((props) => {
   3;
   return (
     <div
-      class="flex w-full cursor-pointer items-center justify-center border-t-2 border-neutral-950 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b-2"
+      class="flex w-full cursor-pointer items-center justify-center border-t-2 border-neutral-950 dark:border-neutral-100 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b-2"
       onMouseEnter$={handleMouseEnter}
       onMouseLeave$={handleMouseLeave}
     >
