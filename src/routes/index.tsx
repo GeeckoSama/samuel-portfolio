@@ -1,8 +1,8 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { HeroImgGrowWithScroll } from "~/components/HeroImgGrowWithScroll/HeroImgGrowWithScroll";
-import { ImageSlideGallery } from "~/components/ImageSlideGallery/ImageSlideGallery";
-import { HeroParallaxScroll } from "~/components/HeroParallaxScroll/HeroParallaxScroll";
+import { HeroImgGrowWithScroll } from "~/components/hero-img-grow-with-scroll/hero-img-grow-with-scroll";
+import { HeroParallaxScroll } from "~/components/hero-parallax-scroll/hero-parallaxs-croll";
+import { ImageSlideGallery } from "~/components/image-slide-gallery/image-slide-gallery";
 import { supabaseServer } from "~/lib/supabase";
 
 export interface Photo {

@@ -1,5 +1,5 @@
 import { component$, type QRL } from "@builder.io/qwik";
-import { InputError } from "./InputError";
+import { InputError } from "./input-error";
 
 type CheckboxProps = {
   ref: QRL<(element: HTMLInputElement) => void>;

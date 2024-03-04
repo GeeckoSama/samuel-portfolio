@@ -5,8 +5,8 @@ import {
   useSignal,
   useTask$,
 } from "@builder.io/qwik";
-import { InputLabel } from "./InputLabel";
-import { InputError } from "./InputError";
+import { InputLabel } from "./input-label";
+import { InputError } from "./input-error";
 
 type FileInputProps = {
   ref: QRL<(element: HTMLInputElement) => void>;

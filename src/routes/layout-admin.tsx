@@ -3,7 +3,7 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 
 import { AdminNavbar } from "~/components/admin-navbar/admin-navbar";
-import { UserContext } from "~/components/AuthContext/AuthContext";
+import { UserContext } from "~/components/auth-context/auth-context";
 import { Sigin } from "~/components/sigin/sigin";
 import styles from "./styles.css?inline";
 

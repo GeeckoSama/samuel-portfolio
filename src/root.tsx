@@ -7,7 +7,7 @@ import {
 import { RouterHead } from "./components/router-head/router-head";
 
 import "./global.css";
-import { AuthContext } from "./components/AuthContext/AuthContext";
+import { AuthContext } from "./components/auth-context/auth-context";
 
 export default component$(() => {
   /**

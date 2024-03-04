@@ -1,6 +1,6 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { gsap } from "gsap";
-import { GlyphText } from "../ui/GlyphText";
+import { GlyphText } from "../ui/glyph-text";
 
 export interface ImageSlideGalleryProps {
   projects: {

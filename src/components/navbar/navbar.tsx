@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import { GlyphText } from "../ui/GlyphText";
+import { GlyphText } from "../ui/glyph-text";
 import Image from "../../media/logo.png?jsx";
 
 export const Navbar = component$(() => {

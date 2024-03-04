@@ -1,7 +1,7 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "./HeroParallaxScroll.module.css";
+import styles from "./hero-parallax-scroll.module.css";
 import Image1 from "../../media/paysage_1.jpg?jsx";
 import Image2 from "../../media/paysage_2.jpg?jsx";
 import Image3 from "../../media/paysage_3.jpg?jsx";

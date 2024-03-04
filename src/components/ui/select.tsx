@@ -1,6 +1,6 @@
 import { component$, type QRL, useSignal, useTask$ } from "@builder.io/qwik";
-import { InputError } from "./InputError";
-import { InputLabel } from "./InputLabel";
+import { InputError } from "./input-error";
+import { InputLabel } from "./input-label";
 
 type SelectProps = {
   ref: QRL<(element: HTMLSelectElement) => void>;

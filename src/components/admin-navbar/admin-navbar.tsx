@@ -1,5 +1,5 @@
 import { component$, useContext, $ } from "@builder.io/qwik";
-import { UserContext } from "../AuthContext/AuthContext";
+import { UserContext } from "../auth-context/auth-context";
 import { supabaseClient } from "~/lib/supabase";
 import { Link } from "@builder.io/qwik-city";
 

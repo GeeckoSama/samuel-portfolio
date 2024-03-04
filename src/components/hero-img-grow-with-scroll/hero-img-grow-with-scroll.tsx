@@ -1,7 +1,7 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GlyphText } from "../ui/GlyphText";
+import { GlyphText } from "../ui/glyph-text";
 import Image from "../../media/ID.jpg?jsx";
 
 export interface HeroImgGrowWithScrollProps {
