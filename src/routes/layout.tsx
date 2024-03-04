@@ -4,6 +4,7 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 
 import { Navbar } from "~/components/navbar/navbar";
 import styles from "./styles.css?inline";
+import { Footer } from "~/components/footer/footer";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -30,6 +31,7 @@ export default component$(() => {
       <main class="bg-base-200">
         <Slot />
       </main>
+      <Footer />
     </>
   );
 });
