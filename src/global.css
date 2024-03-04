@@ -11,8 +11,3 @@
 html {
   font-family: "Chillax-Variable";
 }
-
-.text-inverted {
-  filter: invert(0);
-  mix-blend-mode: difference;
-}

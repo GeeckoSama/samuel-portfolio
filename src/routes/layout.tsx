@@ -1,9 +1,8 @@
-import { component$, Slot, useStyles$ } from "@builder.io/qwik";
+import { component$, Slot } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 
 import { Navbar } from "~/components/navbar/navbar";
-import styles from "./styles.css?inline";
 import { Footer } from "~/components/footer/footer";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -24,7 +23,6 @@ export const useServerTimeLoader = routeLoader$(() => {
 });
 
 export default component$(() => {
-  useStyles$(styles);
   return (
     <>
       <Navbar />

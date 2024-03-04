@@ -1,10 +1,14 @@
-import { component$, Slot, useContext, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  Slot,
+  useContext,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 
 import { AdminNavbar } from "~/components/admin-navbar/admin-navbar";
 import { UserContext } from "~/components/auth-context/auth-context";
-import styles from "./styles.css?inline";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -24,7 +28,6 @@ export const useServerTimeLoader = routeLoader$(() => {
 });
 
 export default component$(() => {
-  useStyles$(styles);
   const user = useContext(UserContext);
   const nav = useNavigate();
   // eslint-disable-next-line qwik/no-use-visible-task
