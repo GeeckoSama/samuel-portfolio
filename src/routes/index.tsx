@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { HeroImgGrowWithScroll } from "~/components/hero-img-grow-with-scroll/hero-img-grow-with-scroll";
+import { HeroList } from "~/components/hero-list/hero-list";
 import { HeroParallaxScroll } from "~/components/hero-parallax-scroll/hero-parallaxs-croll";
 import { ImageSlideGallery } from "~/components/image-slide-gallery/image-slide-gallery";
 import { supabaseServer } from "~/lib/supabase";
@@ -23,7 +23,24 @@ export default component$(() => {
   //const signal = usePhotos();
   return (
     <>
-      <HeroImgGrowWithScroll imgAlt="a picture" text="samuel freret" />
+      <HeroList
+        projects={[
+          {
+            title: "photographie",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/428939279_829369298952379_679006763649312376_n.jpg",
+          },
+          {
+            title: "vidéographie",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/430150245_1139430377511060_7339112946625226185_n.jpg",
+          },
+          {
+            title: "biographie",
+            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/430326676_1177290423647337_6090201498634445794_n.jpg",
+          },
+        ]}
+        sectionTitle="Samuel freret"
+      />
+      {/* <HeroImgGrowWithScroll imgAlt="a picture" text="samuel freret" /> */}
       <HeroParallaxScroll
         title="Production photographique"
         word="Paysage"
