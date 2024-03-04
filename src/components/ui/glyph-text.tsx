@@ -16,15 +16,15 @@ export const GlyphText = component$<GlichedTextProps>((props) => {
   }
   
   @keyframes flash {
-    0%, 20%   { content: '_'; }
-    40%  { content: var(--char-1); }
-    60%  { content: var(--char-2); }
-    80%  { content: var(--char-3); }
+    0%, 10%   { content: '_'; }
+    25%  { content: var(--char-1); }
+    50%  { content: var(--char-2); }
+    75%  { content: var(--char-3); }
   }
   `);
 
   const GLYPHS =
-    "ラドクリフマラソンわたしワタシんょンョたばこタバコとうきょうトウキョウ";
+    "0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/`~";
   const randomChar = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 
   return (

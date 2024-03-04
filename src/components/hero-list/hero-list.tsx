@@ -15,21 +15,29 @@ export const HeroList = component$<HeroListProps>((props) => {
   const selectedProject = useSignal<number>(0);
   const handleHover = $((index: number) => {
     if (index === selectedProject.value) return;
-    gsap.to(imageRef.value!, {
+    /* gsap.to(imageRef.value!, {
       opacity: 0,
       scale: 0.9,
-      duration: 0.3,
-      ease: "power1.in",
+      translateX: -100,
+      duration: 0.1,
+      ease: "expo.out",
     });
     setTimeout(() => {
       selectedProject.value = index;
       gsap.to(imageRef.value!, {
         opacity: 1,
         scale: 1,
-        duration: 0.5,
-        ease: "power3.out",
+        translateX: 0,
+        duration: 0.2,
+        ease: "expo.in",
       });
-    }, 300);
+    }, 100); */
+    selectedProject.value = index;
+    gsap.fromTo(
+      imageRef.value!,
+      { opacity: 0, filter: `blur(${Math.random() * 100}px) hue-rotate(${Math.random() * 360}deg)` },
+      { opacity: 1, filter: "blur(0px) hue-rotate(0deg)", duration: 0.3, ease: "expo.out" },
+    );
   });
   return (
     <main class="grid h-screen grid-cols-2 content-center items-center gap-2 bg-base-100 xl:grid-cols-3">
