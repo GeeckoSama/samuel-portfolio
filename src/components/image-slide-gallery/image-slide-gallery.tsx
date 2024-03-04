@@ -53,7 +53,7 @@ export const Project = component$<ProjectProps>((props) => {
   3;
   return (
     <div
-      class="flex w-full cursor-pointer items-center justify-center border-t-2 border-neutral-950 dark:border-neutral-100 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b-2"
+      class="flex w-full cursor-pointer items-center justify-center border-t border-neutral-950 dark:border-neutral-100 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b"
       onMouseEnter$={handleMouseEnter}
       onMouseLeave$={handleMouseLeave}
     >
@@ -65,7 +65,7 @@ export const Project = component$<ProjectProps>((props) => {
           src={props.project.src}
           width={1740}
           height={1160}
-          class="h-[5vw] w-0"
+          class="h-[7vw] w-0 rounded-box shadow-md"
         />
       </div>
 

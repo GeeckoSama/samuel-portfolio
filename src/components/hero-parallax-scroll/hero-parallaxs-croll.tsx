@@ -74,19 +74,19 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
             ref={(el) => (imagesRefs.value[0] = el)}
             class={styles.imageContainer}
           >
-            <Image1 />
+            <Image1 class="shadow rounded-box" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[1] = el)}
             class={styles.imageContainer}
           >
-            <Image2 />
+            <Image2 class="shadow-md rounded-box" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[2] = el)}
             class={styles.imageContainer}
           >
-            <Image3 />
+            <Image3 class="shadow-xl rounded-box" />
           </div>
           {/* {props.images.map((image, i) => {
             return (
