@@ -1,10 +1,10 @@
 import { component$ } from "@builder.io/qwik";
 
-type InputLabelProps = {
+interface InputLabelProps {
   name: string;
   label?: string;
   required?: boolean;
-};
+}
 
 /**
  * Label for an input field. The label can be used to describe the input field
@@ -15,15 +15,13 @@ type InputLabelProps = {
  * @param required - If the field is required.
  * @returns The label element.
  */
-export const InputLabel = component$(
-  ({ name, label, required }: InputLabelProps) => (
-    <>
-      {label && (
-        <label class="label" for={name}>
-          <span class="label-text">{label}</span>
-          {required && <span class="tabel-text-alt text-red-400">*</span>}
-        </label>
-      )}
-    </>
-  ),
-);
+export const InputLabel = component$<InputLabelProps>((props) => (
+  <>
+    {props.label && (
+      <siv class="label" for={props.name}>
+        <span class="label-text">{props.label}</span>
+        {!props.required && <span class="tabel-text-alt">(optionnel)</span>}
+      </siv>
+    )}
+  </>
+));
