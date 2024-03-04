@@ -26,7 +26,7 @@ export default component$(() => {
   return (
     <>
       <Navbar />
-      <main class="bg-base-200">
+      <main class="bg-base-100">
         <Slot />
       </main>
       <Footer />
