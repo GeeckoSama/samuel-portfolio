@@ -43,7 +43,7 @@ export const Navbar = component$(() => {
           <Image class="h-12 w-auto mix-blend-difference" alt="logo" />
         </a>
       </div>
-      <div class="navbar-end hidden lg:flex">
+      {/* <div class="navbar-end hidden lg:flex">
         <ul class="menu menu-horizontal menu-lg px-1 ">
           <li>
             <Link href="#">
@@ -61,7 +61,7 @@ export const Navbar = component$(() => {
             </Link>
           </li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 });
