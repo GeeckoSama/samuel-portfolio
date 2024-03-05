@@ -49,7 +49,7 @@ export const HeroImgGrowWithScroll = component$<HeroImgGrowWithScrollProps>(
           class="h-[100vh] w-full translate-x-1/4 object-contain object-center lg:sticky lg:top-0 lg:translate-x-0 lg:scale-[0.1]"
           alt={props.imgAlt}
         />
-        <h2 class="invert-1 absolute top-[51vh] left-[-16vh] lg:sticky lg:bottom-[0vh] lg:top-[50vh] ml-8 -rotate-90 text-2xl font-black uppercase tracking-widest text-neutral-100 mix-blend-difference lg:rotate-0 lg:text-8xl">
+        <h2 class="invert-1 absolute left-[-16vh] top-[51vh] ml-8 -rotate-90 text-2xl font-black uppercase tracking-widest text-neutral-100 mix-blend-difference lg:sticky lg:bottom-[0vh] lg:top-[50vh] lg:rotate-0 lg:text-8xl">
           {isMobile.value ? (
             <h2>{props.text}</h2>
           ) : (

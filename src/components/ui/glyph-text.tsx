@@ -23,8 +23,7 @@ export const GlyphText = component$<GlichedTextProps>((props) => {
   }
   `);
 
-  const GLYPHS =
-    "0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/`~";
+  const GLYPHS = "0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/`~";
   const randomChar = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 
   return (

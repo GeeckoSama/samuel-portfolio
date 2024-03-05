@@ -35,8 +35,16 @@ export const HeroList = component$<HeroListProps>((props) => {
     selectedProject.value = index;
     gsap.fromTo(
       imageRef.value!,
-      { opacity: 0, filter: `blur(${Math.random() * 100}px) hue-rotate(${Math.random() * 360}deg)` },
-      { opacity: 1, filter: "blur(0px) hue-rotate(0deg)", duration: 0.3, ease: "expo.out" },
+      {
+        opacity: 0,
+        filter: `blur(${Math.random() * 100}px) hue-rotate(${Math.random() * 360}deg)`,
+      },
+      {
+        opacity: 1,
+        filter: "blur(0px) hue-rotate(0deg)",
+        duration: 0.3,
+        ease: "expo.out",
+      },
     );
   });
   return (

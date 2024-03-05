@@ -15,7 +15,9 @@ export const ImageSlideGallery = component$<ImageSlideGalleryProps>((props) => {
   return (
     <main class="flex h-screen content-center items-center bg-base-100">
       <div class="mx-auto w-[70%]">
-        <div class="text-3xl font-bold uppercase mb-10"><GlyphText text={props.sectionTitle} /></div>
+        <div class="mb-10 text-3xl font-bold uppercase">
+          <GlyphText text={props.sectionTitle} />
+        </div>
 
         {props.projects.map((project, i) => {
           return <Project key={i} project={project} />;
@@ -53,7 +55,7 @@ export const Project = component$<ProjectProps>((props) => {
   3;
   return (
     <div
-      class="flex w-full cursor-pointer items-center justify-center border-t border-neutral-950 dark:border-neutral-100 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b"
+      class="flex w-full cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b dark:border-neutral-100"
       onMouseEnter$={handleMouseEnter}
       onMouseLeave$={handleMouseLeave}
     >
