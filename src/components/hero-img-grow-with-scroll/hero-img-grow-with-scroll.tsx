@@ -1,8 +1,9 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { isServer } from "@builder.io/qwik/build";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GlyphText } from "../ui/glyph-text";
 import Image from "../../media/ID.jpg?jsx";
+import { GlyphText } from "../ui/glyph-text";
 
 export interface HeroImgGrowWithScrollProps {
   imgAlt: string;
@@ -14,8 +15,9 @@ export const HeroImgGrowWithScroll = component$<HeroImgGrowWithScrollProps>(
     const containerRef = useSignal<Element>();
     const imageRef = useSignal<Element>();
     const isMobile = useSignal<boolean>(false);
-    // eslint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(() => {
+
+    useTask$(() => {
+      if (isServer) return;
       isMobile.value = window.innerWidth < 768;
       if (isMobile.value) return;
       const context = gsap.context(() => {

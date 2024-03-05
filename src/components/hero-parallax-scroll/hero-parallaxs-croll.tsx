@@ -1,4 +1,5 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { isServer } from "@builder.io/qwik/build";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image1 from "../../media/paysage_1.jpg?jsx";
@@ -18,8 +19,8 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
     const lettersRefs = useSignal<Element[]>([]);
     const imagesRefs = useSignal<Element[]>([]);
 
-    // eslint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(() => {
+    useTask$(() => {
+      if (isServer) return;
       gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
         const tl = gsap

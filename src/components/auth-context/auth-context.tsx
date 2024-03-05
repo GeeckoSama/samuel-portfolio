@@ -5,8 +5,9 @@ import {
   createContextId,
   useContextProvider,
   useSignal,
-  useVisibleTask$,
+  useTask$,
 } from "@builder.io/qwik";
+import { isServer } from "@builder.io/qwik/build";
 import type { User } from "supabase-auth-helpers-qwik";
 import { supabaseClient } from "~/lib/supabase";
 
@@ -18,7 +19,8 @@ export const AuthContext = component$(() => {
   useContextProvider(UserContext, user);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useTask$(() => {
+    if (isServer) return;
     const supabase = supabaseClient();
     supabase.auth.getSession().then((result) => {
       user.value = result.data.session?.user ?? null;
