@@ -40,7 +40,6 @@ export default component$(() => {
         ]}
         sectionTitle="Samuel freret"
       />
-      {/* <HeroImgGrowWithScroll imgAlt="a picture" text="samuel freret" /> */}
       <HeroParallaxScroll
         title="Production photographique"
         word="Paysage"
@@ -80,11 +79,12 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: "Samuel Freret - Photographe et vidéaste",
   meta: [
     {
       name: "description",
-      content: "Qwik site description",
+      content:
+        "Samuel Freret - Photographe et vidéaste, découvrez mes réalisations photographiques et vidéographiques",
     },
   ],
 };
