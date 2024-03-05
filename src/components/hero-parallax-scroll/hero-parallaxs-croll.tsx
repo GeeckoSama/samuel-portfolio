@@ -1,7 +1,6 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "./hero-parallax-scroll.module.css";
 import Image1 from "../../media/paysage_1.jpg?jsx";
 import Image2 from "../../media/paysage_2.jpg?jsx";
 import Image3 from "../../media/paysage_3.jpg?jsx";
@@ -49,17 +48,19 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
     });
 
     return (
-      <div ref={containerRef} class={styles.container}>
-        <div class={styles.body}>
-          <h1 ref={titleRef}>{props.title}</h1>
-          <div class={styles.word}>
-            <p>
+      <div ref={containerRef} class="my-[10vh] min-h-screen">
+        <div class="ml-[10vw]">
+          <h1 ref={titleRef} class="m-0 mt-2 text-3xl font-semibold uppercase">
+            {props.title}
+          </h1>
+          <div>
+            <p class="m-0 mt-2 text-xl font-medium uppercase">
               {props.word.split("").map((letter, i) => {
                 return (
                   <span
                     key={`l_${i}`}
                     ref={(el) => (lettersRefs.value[i] = el)}
-                    class="relative"
+                    class="relative z-40"
                   >
                     {letter}
                   </span>
@@ -69,36 +70,25 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
           </div>
         </div>
 
-        <div class={styles.images}>
+        <div class="relative mt-[5vh] flex w-full content-center justify-center">
           <div
             ref={(el) => (imagesRefs.value[0] = el)}
-            class={styles.imageContainer}
+            class="absolute z-10 h-[80vh] w-[80vw]"
           >
-            <Image1 class="shadow rounded-box" />
+            <Image1 class="h-auto w-full rounded-box object-cover object-center shadow-lg" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[1] = el)}
-            class={styles.imageContainer}
+            class="absolute right-[5vw] top-[10vh] z-20 h-[50vh] w-[40vh]"
           >
-            <Image2 class="shadow-md rounded-box" />
+            <Image2 class=" h-full w-auto rounded-box object-cover object-center shadow-xl" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[2] = el)}
-            class={styles.imageContainer}
+            class="absolute left-[10vw] top-[75vh] z-30 h-[45vh] w-[40vh] rounded-box shadow-2xl"
           >
-            <Image3 class="shadow-xl rounded-box" />
+            <Image3 class=" h-full w-auto rounded-box object-cover object-center shadow-2xl" />
           </div>
-          {/* {props.images.map((image, i) => {
-            return (
-              <div
-                key={`i_${i}`}
-                ref={(el) => (imagesRefs.value[i] = el)}
-                class={styles.imageContainer}
-              >
-                <img src={image} alt="image" />
-              </div>
-            );
-          })} */}
         </div>
       </div>
     );
