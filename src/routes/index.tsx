@@ -1,7 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { HeroList } from "~/components/hero-list/hero-list";
-import { HeroMaskOnscroll } from "~/components/hero-mask-onscroll/hero-mask-onscroll";
 import { HeroParallaxScroll } from "~/components/hero-parallax-scroll/hero-parallaxs-croll";
 import { ImageSlideGallery } from "~/components/image-slide-gallery/image-slide-gallery";
 import { supabaseServer } from "~/lib/supabase";
@@ -41,7 +40,6 @@ export default component$(() => {
         ]}
         sectionTitle="Samuel freret"
       />
-      <HeroMaskOnscroll />
       <HeroParallaxScroll
         title="Production photographique"
         word="Paysage"
