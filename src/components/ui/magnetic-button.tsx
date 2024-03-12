@@ -41,6 +41,8 @@ export const MagneticButton = component$<MagneticButtonProps>((props) => {
     <a
       href={props.url}
       ref={magnetic}
+      target="_blank"
+      rel="noopener noreferrer"
       onMouseLeave$={handleMouseLeave}
       onMouseMove$={handleMouseMove}
     >

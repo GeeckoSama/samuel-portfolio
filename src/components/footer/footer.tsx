@@ -8,6 +8,8 @@ export const Footer = component$(() => {
   return (
     <footer class="footer footer-center rounded bg-base-100 p-10 text-base-content">
       <nav>
+        <h3 class="text-2xl font-semibold mb-4">Merci de votre visite</h3>
+        <p class="text-lg font-medium mb-8">Vous pouvez suivre mon travail sur les réseaux</p>
         <div class="grid grid-flow-col gap-12">
           <MagneticButton url="https://www.instagram.com/guiltyjacket_?igsh=eGVqdWRleGhwMWto&utm_source=qr">
             <SiInstagram class="h-8 w-8 fill-current" />
@@ -20,7 +22,11 @@ export const Footer = component$(() => {
       <aside>
         <div>
           Réalisé par{" "}
-          <Link href="https://github.com/GeeckoSama">
+          <Link
+            href="https://github.com/GeeckoSama"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <GlyphText text="GeeckoSama" />
           </Link>
         </div>
