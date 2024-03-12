@@ -1,6 +1,7 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { GlyphText } from "../ui/glyph-text";
+import { Link } from "@builder.io/qwik-city";
 
 export interface ImageSlideGalleryProps {
   projects: {
@@ -13,9 +14,9 @@ export interface ImageSlideGalleryProps {
 
 export const ImageSlideGallery = component$<ImageSlideGalleryProps>((props) => {
   return (
-    <main class="flex h-screen content-center items-center bg-base-100">
-      <div class="mx-auto w-[70%]">
-        <div class="mb-10 text-3xl font-bold uppercase">
+    <main class="flex h-screen content-center items-center">
+      <div class="mx-auto w-screen lg:w-[70%]">
+        <div class="mb-10 text-2xl font-bold uppercase">
           <GlyphText text={props.sectionTitle} />
         </div>
 
@@ -54,12 +55,12 @@ export const Project = component$<ProjectProps>((props) => {
   });
   3;
   return (
-    <div
+    <Link href="#"
       class="flex w-full cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b dark:border-neutral-100"
       onMouseEnter$={handleMouseEnter}
       onMouseLeave$={handleMouseLeave}
     >
-      <p class="mr-[0.75vw] text-3xl font-bold">{props.project.title1}</p>
+      <p class="mr-[0.75vw] text-xl lg:text-3xl font-bold">{props.project.title1}</p>
 
       <div class="flex justify-center overflow-hidden">
         <img
@@ -67,11 +68,11 @@ export const Project = component$<ProjectProps>((props) => {
           src={props.project.src}
           width={1740}
           height={1160}
-          class="h-[7vw] w-0 rounded-box shadow-md"
+          class="h-[7vw] w-0 shadow-md"
         />
       </div>
 
-      <p class="ml-[0.75vw] text-3xl font-bold">{props.project.title2}</p>
-    </div>
+      <p class="ml-[0.75vw] text-xl lg:text-3xl font-bold">{props.project.title2}</p>
+    </Link>
   );
 });
