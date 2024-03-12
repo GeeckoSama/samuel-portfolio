@@ -1,5 +1,8 @@
-import { component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { isServer } from "@builder.io/qwik/build";
+import {
+  component$,
+  useSignal,
+  useVisibleTask$
+} from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image1 from "../../media/paysage_1.jpg?jsx";
@@ -19,8 +22,8 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
     const lettersRefs = useSignal<Element[]>([]);
     const imagesRefs = useSignal<Element[]>([]);
 
-    useTask$(() => {
-      if (isServer) return;
+    // eslint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(() => {
       gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
         const tl = gsap
@@ -39,7 +42,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
           tl.to(
             letter,
             {
-              top: Math.floor(Math.random() * 85) + 25,
+              top: Math.floor(Math.random() * 50),
             },
             0,
           );
@@ -51,9 +54,9 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
     return (
       <div ref={containerRef} class="my-[10vh] min-h-screen">
         <div class="ml-[10vw]">
-          <h1 ref={titleRef} class="m-0 mt-2 text-3xl font-semibold uppercase">
+          <h2 ref={titleRef} class="m-0 mt-2 text-xl font-semibold uppercase">
             {props.title}
-          </h1>
+          </h2>
           <div>
             <p class="m-0 mt-2 text-xl font-medium uppercase">
               {props.word.split("").map((letter, i) => {
@@ -74,21 +77,21 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
         <div class="relative mt-[5vh] flex w-full content-center justify-center">
           <div
             ref={(el) => (imagesRefs.value[0] = el)}
-            class="absolute z-10 h-[80vh] w-[80vw]"
+            class="absolute z-10 h-[80vh] w-screen lg:w-[80vw]"
           >
-            <Image1 class="h-auto w-full rounded-box object-cover object-center shadow-lg" />
+            <Image1 class="h-full w-auto  object-cover object-center shadow-lg" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[1] = el)}
-            class="absolute right-[5vw] top-[10vh] z-20 h-[50vh] w-[40vh]"
+            class="absolute right-[5vw] top-[10vh] z-20 h-[25vh] w-[20vh] lg:h-[50vh] lg:w-[40vh]"
           >
-            <Image2 class=" h-full w-auto rounded-box object-cover object-center shadow-xl" />
+            <Image2 class=" h-full w-auto  object-cover object-center shadow-xl" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[2] = el)}
-            class="absolute left-[10vw] top-[75vh] z-30 h-[45vh] w-[40vh] rounded-box shadow-2xl"
+            class="absolute left-[10vw] top-[75vh] z-30 h-[20vh] w-[20vh] lg:h-[45vh] lg:w-[40vh]"
           >
-            <Image3 class=" h-full w-auto rounded-box object-cover object-center shadow-2xl" />
+            <Image3 class=" h-full w-auto  object-cover object-center shadow-2xl" />
           </div>
         </div>
       </div>
