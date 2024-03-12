@@ -1,6 +1,7 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { GlyphText } from "../ui/glyph-text";
 import gsap from "gsap";
+import { Link } from "@builder.io/qwik-city";
 
 export interface HeroListProps {
   projects: {
@@ -33,30 +34,34 @@ export const HeroList = component$<HeroListProps>((props) => {
   });
 
   return (
-    <main class="grid h-screen grid-cols-2 content-center items-center gap-2 bg-base-100 xl:grid-cols-3">
-      <div class="mx-auto max-w-[50vw] xl:col-span-2">
+    <section class="grid h-screen grid-cols-1 gap-2 lg:grid-cols-2 lg:content-center lg:items-center">
+      <div class="flex justify-end lg:h-[87vh]">
         <img
           ref={imageRef}
           src={props.projects[selectedProject.value].src}
           alt=""
-          width={1920}
-          height={1080}
-          class="h-full w-full rounded-box object-cover shadow-lg"
+          width={580}
+          height={720}
+          class="h-full w-auto object-cover"
         />
       </div>
       <div class="">
+        <h1 class="mb-14 text-2xl font-extrabold uppercase underline lg:mb-[66%]">
+          {props.sectionTitle}
+        </h1>
         {props.projects.map((project, i) => {
           return (
-            <div
-              key={i}
-              onMouseOver$={() => handleHover(i)}
-              class="cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] text-[3vw] font-bold last-of-type:border-b dark:border-neutral-100"
-            >
-              <GlyphText text={project.title} />
-            </div>
+            <Link key={i} href="#">
+              <div
+                onMouseOver$={() => handleHover(i)}
+                class="cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] text-xl font-bold last-of-type:border-b dark:border-neutral-100"
+              >
+                <GlyphText text={project.title} />
+              </div>
+            </Link>
           );
         })}
       </div>
-    </main>
+    </section>
   );
 });
