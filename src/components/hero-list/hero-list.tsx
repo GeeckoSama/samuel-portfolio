@@ -16,10 +16,10 @@ export const HeroList = component$<HeroListProps>((props) => {
   const selectedProject = useSignal<number>(0);
 
   const handleHover = $((index: number) => {
-    if (index === selectedProject.value) return;
+    if (index === selectedProject.value || imageRef.value === undefined) return;
     selectedProject.value = index;
     gsap.fromTo(
-      imageRef.value!,
+      imageRef.value,
       {
         opacity: 0,
         filter: `blur(${Math.random() * 100}px) hue-rotate(${Math.random() * 360}deg)`,
@@ -34,7 +34,7 @@ export const HeroList = component$<HeroListProps>((props) => {
   });
 
   return (
-    <section class="grid h-screen grid-cols-1 gap-2 lg:grid-cols-2 lg:content-center lg:items-center">
+    <section class="grid h-screen grid-cols-1 gap-2 p-4 lg:grid-cols-2 lg:content-end lg:items-end">
       <div class="flex justify-end lg:h-[87vh]">
         <img
           ref={imageRef}
@@ -43,24 +43,28 @@ export const HeroList = component$<HeroListProps>((props) => {
           width={580}
           height={720}
           class="h-full w-auto object-cover"
+          loading="eager"
+          decoding="sync"
         />
       </div>
-      <div class="">
-        <h1 class="mb-14 text-2xl font-extrabold uppercase underline lg:mb-[66%]">
+      <div class="flex-1 flex-col">
+        <h1 class="mb-14 text-2xl font-extrabold uppercase underline xl:text-3xl">
           {props.sectionTitle}
         </h1>
-        {props.projects.map((project, i) => {
-          return (
-            <Link key={i} href="#">
-              <div
-                onMouseOver$={() => handleHover(i)}
-                class="cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] text-xl font-bold last-of-type:border-b dark:border-neutral-100"
-              >
-                <GlyphText text={project.title} />
-              </div>
-            </Link>
-          );
-        })}
+        <nav>
+          {props.projects.map((project, i) => {
+            return (
+              <Link key={i} href="#">
+                <div
+                  onMouseOver$={() => handleHover(i)}
+                  class="cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] text-xl xl:text-2xl font-bold last-of-type:border-b dark:border-neutral-100"
+                >
+                  <GlyphText text={project.title} />
+                </div>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </section>
   );
