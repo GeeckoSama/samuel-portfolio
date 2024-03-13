@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import Image from "../../media/logo.png?jsx";
+import Image from "@images/logo.png?jsx";
 import { Link } from "@builder.io/qwik-city";
 
 export const Navbar = component$(() => {

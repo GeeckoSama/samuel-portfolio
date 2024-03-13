@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import { Table } from "~/components/table/table";
-import { supabaseServer } from "~/lib/supabase";
+import { Table } from "@components/table/table";
+import { supabaseServer } from "@libs/supabase";
 import type { Photos } from "~/types/photo";
 
 export const usePhotos = routeLoader$(async (requestEvent) => {

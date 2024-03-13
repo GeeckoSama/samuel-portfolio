@@ -2,7 +2,7 @@ import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { isServer } from "@builder.io/qwik/build";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "../../media/ID.jpg?jsx";
+import Image from "@images/ID.jpg?jsx";
 import { GlyphText } from "../ui/glyph-text";
 
 export interface HeroImgGrowWithScrollProps {

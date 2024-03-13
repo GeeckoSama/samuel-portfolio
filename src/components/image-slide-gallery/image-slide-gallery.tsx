@@ -55,12 +55,15 @@ export const Project = component$<ProjectProps>((props) => {
   });
   3;
   return (
-    <Link href="#"
+    <Link
+      href="#"
       class="flex w-full cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b dark:border-neutral-100"
       onMouseEnter$={handleMouseEnter}
       onMouseLeave$={handleMouseLeave}
     >
-      <p class="mr-[0.75vw] text-xl lg:text-3xl font-bold">{props.project.title1}</p>
+      <p class="mr-[0.75vw] text-xl font-bold lg:text-3xl">
+        {props.project.title1}
+      </p>
 
       <div class="flex justify-center overflow-hidden">
         <img
@@ -72,7 +75,9 @@ export const Project = component$<ProjectProps>((props) => {
         />
       </div>
 
-      <p class="ml-[0.75vw] text-xl lg:text-3xl font-bold">{props.project.title2}</p>
+      <p class="ml-[0.75vw] text-xl font-bold lg:text-3xl">
+        {props.project.title2}
+      </p>
     </Link>
   );
 });

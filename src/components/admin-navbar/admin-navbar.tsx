@@ -1,6 +1,6 @@
 import { component$, useContext, $ } from "@builder.io/qwik";
 import { UserContext } from "../auth-context/auth-context";
-import { supabaseClient } from "~/lib/supabase";
+import { supabaseClient } from "@libs/supabase";
 import { Link } from "@builder.io/qwik-city";
 
 export const AdminNavbar = component$(() => {

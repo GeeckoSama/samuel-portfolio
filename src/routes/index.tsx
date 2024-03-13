@@ -1,10 +1,10 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { ContactSection } from "~/components/contact-section/contact-section";
-import { HeroList } from "~/components/hero-list/hero-list";
-import { HeroParallaxScroll } from "~/components/hero-parallax-scroll/hero-parallaxs-croll";
-import { ImageSlideGallery } from "~/components/image-slide-gallery/image-slide-gallery";
-import { supabaseServer } from "~/lib/supabase";
+import { ContactSection } from "@components/contact-section/contact-section";
+import { HeroList } from "@components/hero-list/hero-list";
+import { HeroParallaxScroll } from "@components/hero-parallax-scroll/hero-parallaxs-croll";
+import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
+import { supabaseServer } from "@libs/supabase";
 
 export interface Photo {
   id: number;

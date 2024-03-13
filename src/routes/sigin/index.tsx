@@ -4,8 +4,8 @@ import type { SubmitHandler, InitialValues } from "@modular-forms/qwik";
 import { useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Input } from "valibot";
 import { email, minLength, object, string } from "valibot";
-import { TextInput } from "~/components/ui/text-input";
-import { supabaseClient } from "~/lib/supabase";
+import { TextInput } from "@components/ui/text-input";
+import { supabaseClient } from "@libs/supabase";
 
 const LoginSchema = object({
   email: string([

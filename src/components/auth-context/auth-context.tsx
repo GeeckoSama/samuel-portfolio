@@ -9,7 +9,7 @@ import {
 } from "@builder.io/qwik";
 import { isServer } from "@builder.io/qwik/build";
 import type { User } from "supabase-auth-helpers-qwik";
-import { supabaseClient } from "~/lib/supabase";
+import { supabaseClient } from "@libs/supabase";
 
 export const UserContext =
   createContextId<Signal<User | null>>("auth.user-context");

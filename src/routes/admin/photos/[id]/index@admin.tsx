@@ -5,9 +5,9 @@ import type { SubmitHandler } from "@modular-forms/qwik";
 import { useForm, valiForm$, type InitialValues } from "@modular-forms/qwik";
 import type { Input } from "valibot";
 import { minLength, number, object, optional, special, string } from "valibot";
-import { FileInput } from "~/components/ui/file-input";
-import { TextInput } from "~/components/ui/text-input";
-import { supabaseClient, supabaseServer } from "~/lib/supabase";
+import { FileInput } from "@components/ui/file-input";
+import { TextInput } from "@components/ui/text-input";
+import { supabaseClient, supabaseServer } from "@libs/supabase";
 
 const isFile = (input: unknown) => input instanceof File;
 
