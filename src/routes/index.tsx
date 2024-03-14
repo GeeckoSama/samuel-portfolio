@@ -2,9 +2,9 @@ import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
-import { HeroParallaxScroll } from "@components/hero-parallax-scroll/hero-parallaxs-croll";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
 import { supabaseServer } from "@libs/supabase";
+import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
 
 export interface Photo {
   id: number;
@@ -41,11 +41,11 @@ export default component$(() => {
         ]}
         sectionTitle="Samuel freret"
       />
-      <HeroParallaxScroll
+      <SectionAlbumPhoto
         title="Production photographique"
-        word="Paysage"
+        subtitle="Paysage"
         images={[
-          "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+          "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
         ]}

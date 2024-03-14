@@ -1,17 +1,17 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image1 from "@images/paysage_1.jpg?jsx";
+//import Image1 from "@images/paysage_1.jpg?jsx";
 import Image2 from "@images/paysage_2.jpg?jsx";
 import Image3 from "@images/paysage_3.jpg?jsx";
 
 export interface HeroParallaxScrollProps {
   title: string;
-  word: string;
+  subtitle: string;
   images: string[];
 }
 
-export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
+export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
   (props) => {
     const containerRef = useSignal<Element>();
     const titleRef = useSignal<Element>();
@@ -54,8 +54,8 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
             {props.title}
           </h2>
           <div>
-            <p class="m-0 mt-2 text-xl font-medium uppercase">
-              {props.word.split("").map((letter, i) => {
+            <h3 class="m-0 mt-2 text-xl font-medium uppercase">
+              {props.subtitle.split("").map((letter, i) => {
                 return (
                   <span
                     key={`l_${i}`}
@@ -66,7 +66,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
                   </span>
                 );
               })}
-            </p>
+            </h3>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export const HeroParallaxScroll = component$<HeroParallaxScrollProps>(
             ref={(el) => (imagesRefs.value[0] = el)}
             class="absolute z-10 h-[80vh] w-screen lg:w-[80vw]"
           >
-            <Image1 class="h-full w-auto  object-cover object-center shadow-lg" />
+            <img src={props.images[0]} loading="lazy" decoding="async" width={1920} height={1080} class="h-full w-auto object-cover object-center shadow-lg lg:h-auto lg:w-auto" />
           </div>
           <div
             ref={(el) => (imagesRefs.value[1] = el)}
