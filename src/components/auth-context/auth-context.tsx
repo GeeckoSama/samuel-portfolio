@@ -1,41 +1,45 @@
-import type { Signal } from "@builder.io/qwik";
 import {
   Slot,
   component$,
   createContextId,
   useContextProvider,
-  useSignal,
-  useTask$,
+  useStore,
+  useVisibleTask$,
 } from "@builder.io/qwik";
-import { isServer } from "@builder.io/qwik/build";
-import type { User } from "supabase-auth-helpers-qwik";
-import { supabaseClient } from "@libs/supabase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "~/libs/firebase";
 
-export const UserContext =
-  createContextId<Signal<User | null>>("auth.user-context");
+export interface User {
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  uid: string | null;
+}
+
+export const UserContext = createContextId<User>("auth.user-context");
 
 export const AuthContext = component$(() => {
-  const user = useSignal<User | null>(null);
+  const user = useStore<User>({
+    displayName: null,
+    email: null,
+    photoURL: null,
+    uid: null,
+  });
   useContextProvider(UserContext, user);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useTask$(() => {
-    if (isServer) return;
-    const supabase = supabaseClient();
-    supabase.auth.getSession().then((result) => {
-      user.value = result.data.session?.user ?? null;
-    });
-
-    const {
-      data: { subscription: authListener },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      //console.log("Auth state change", event, session);
-      user.value = session?.user ?? null;
+  useVisibleTask$(() => {
+    const unsubscribe = onAuthStateChanged(auth, (result) => {
+      console.log("Auth state changed", result);
+      user.displayName = result ? result.displayName : null;
+      user.email = result ? result.email : null;
+      user.photoURL = result ? result.photoURL : null;
+      user.uid = result ? result.uid : null;
     });
 
     return () => {
       //console.log("Unsubscribing from auth listener");
-      authListener.unsubscribe();
+      unsubscribe();
     };
   });
   return (

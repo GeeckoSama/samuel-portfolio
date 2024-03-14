@@ -1,9 +1,9 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import type { Photos, Videos } from "~/types/photo";
 import { HiPencilSquareSolid, HiPlusSolid } from "@qwikest/icons/heroicons";
+import type { Photos } from "~/libs/photo.type";
 
-export const Table = component$<{ data: Photos | Videos }>((props) => {
+export const Table = component$<{ data: Photos }>((props) => {
   return (
     <div class="overflow-x-auto">
       <table class="table">

@@ -5,7 +5,8 @@ import { useForm, valiForm$ } from "@modular-forms/qwik";
 import type { Input } from "valibot";
 import { email, minLength, object, string } from "valibot";
 import { TextInput } from "@components/ui/text-input";
-import { supabaseClient } from "@libs/supabase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "~/libs/firebase";
 
 const LoginSchema = object({
   email: string([
@@ -35,12 +36,9 @@ export default component$(() => {
   const handleSubmit = $<SubmitHandler<LoginForm>>((values) => {
     // Runs on client
     console.log("values", values);
-    supabaseClient()
-      .auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      })
+    signInWithEmailAndPassword(auth, values.email, values.password)
       .then(() => {
+        console.log("User signed in");
         nav("/admin");
       })
       .catch((error) => {

@@ -32,7 +32,7 @@ export default component$(() => {
   const nav = useNavigate();
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (!user.value) {
+    if (!user.uid) {
       nav("/sigin");
     }
   });
@@ -40,7 +40,7 @@ export default component$(() => {
     <>
       <AdminNavbar />
       <main class="mt-14 min-h-screen bg-gray-200 py-4 dark:bg-gray-950">
-        {user.value ? <Slot /> : <></>}
+        {user.uid ? <Slot /> : <></>}
       </main>
     </>
   );

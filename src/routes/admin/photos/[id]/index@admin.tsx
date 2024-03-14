@@ -7,7 +7,6 @@ import type { Input } from "valibot";
 import { minLength, number, object, optional, special, string } from "valibot";
 import { FileInput } from "@components/ui/file-input";
 import { TextInput } from "@components/ui/text-input";
-import { supabaseClient, supabaseServer } from "@libs/supabase";
 
 const isFile = (input: unknown) => input instanceof File;
 
@@ -24,7 +23,7 @@ export const PhotoEditSchema = object({
 export type PhotoEditForm = Input<typeof PhotoEditSchema>;
 
 export const useFormLoader = routeLoader$(async (requestEvent) => {
-  const supabaseClient = supabaseServer(requestEvent);
+  /* const supabaseClient = supabaseServer(requestEvent);
   const id = +requestEvent.params.id;
   if (!id) {
     throw new Error("id is required");
@@ -45,6 +44,15 @@ export const useFormLoader = routeLoader$(async (requestEvent) => {
     file: {
       item: undefined,
     },
+  } as InitialValues<PhotoEditForm>; */
+  return {
+    id: 0,
+    title: "",
+    description: "",
+    photo_url: "",
+    file: {
+      item: undefined,
+    },
   } as InitialValues<PhotoEditForm>;
 });
 
@@ -57,7 +65,7 @@ export default component$(() => {
   });
 
   const handleSubmit: QRL<SubmitHandler<PhotoEditForm>> = $(async (values) => {
-    try {
+    /* try {
       const supabase = supabaseClient();
       console.log("Start creating photo");
       console.log("values", values);
@@ -95,7 +103,7 @@ export default component$(() => {
       //nav("/admin/photos");
     } catch (error) {
       console.error("Error uploading file", error);
-    }
+    } */
   });
 
   const handleReset = $(() => {

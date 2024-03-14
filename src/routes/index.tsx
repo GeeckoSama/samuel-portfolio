@@ -3,7 +3,6 @@ import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
-import { supabaseServer } from "@libs/supabase";
 import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
 
 export interface Photo {
@@ -15,10 +14,7 @@ export interface Photo {
   updated_at: Date;
 }
 
-export const usePhotos = routeLoader$(async (requestEvent) => {
-  const supabaseClient = supabaseServer(requestEvent);
-  return await supabaseClient.from("photos").select("*");
-});
+export const usePhotos = routeLoader$(async (requestEvent) => {});
 
 export default component$(() => {
   //const signal = usePhotos();

@@ -1,18 +1,16 @@
 import type { NoSerialize, QRL } from "@builder.io/qwik";
 import { $, component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
+import { FileInput } from "@components/ui/file-input";
+import { TextInput } from "@components/ui/text-input";
 import type { SubmitHandler } from "@modular-forms/qwik";
 import {
-  formAction$,
   useForm,
   valiForm$,
-  type InitialValues,
+  type InitialValues
 } from "@modular-forms/qwik";
 import type { Input } from "valibot";
 import { minLength, object, special, string } from "valibot";
-import { FileInput } from "@components/ui/file-input";
-import { TextInput } from "@components/ui/text-input";
-import { supabaseClient, supabaseServer } from "@libs/supabase";
 
 const isFile = (input: unknown) => input instanceof File;
 
@@ -34,7 +32,7 @@ export const useFormLoader = routeLoader$<InitialValues<PhotoForm>>(() => ({
   },
 }));
 
-export const useFormAction = formAction$<PhotoForm>(
+/* export const useFormAction = formAction$<PhotoForm>(
   async (values, requestEvent) => {
     try {
       console.log("Start creating photo");
@@ -77,18 +75,17 @@ export const useFormAction = formAction$<PhotoForm>(
     }
   },
   valiForm$(PhotoSchema),
-);
+); */
 
 export default component$(() => {
   const [photoForm, { Form, Field }] = useForm<PhotoForm>({
     loader: useFormLoader(),
-    action: useFormAction(),
     validate: valiForm$(PhotoSchema),
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit: QRL<SubmitHandler<PhotoForm>> = $(async (values) => {
-    try {
+    /* try {
       const supabase = supabaseClient();
       console.log("Start creating photo");
       console.log("values", values);
@@ -125,7 +122,7 @@ export default component$(() => {
       console.log("Photo created", result.status);
     } catch (error) {
       console.error("Error uploading file", error);
-    }
+    } */
   });
 
   return (

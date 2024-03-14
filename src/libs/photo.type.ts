@@ -1,22 +1,21 @@
 export interface Photo {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  url: string;
-  shooting_date: Date;
-  create_at: Date;
-  updated_at: Date;
+  path: string;
+  create_at: number;
+  update_at: number;
 }
 
 export type Photos = Photo[];
 
 export interface Album {
-  id: number;
+  id: string;
   title: string;
   description: string;
   photos: Photo[];
-  create_at: Date;
-  updated_at: Date;
+  create_at: number;
+  update_at: number;
 }
 
 export type Albums = Album[];

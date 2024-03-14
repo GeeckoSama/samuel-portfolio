@@ -1,13 +1,14 @@
 import { component$, useContext, $ } from "@builder.io/qwik";
 import { UserContext } from "../auth-context/auth-context";
-import { supabaseClient } from "@libs/supabase";
 import { Link } from "@builder.io/qwik-city";
+import { signOut } from "firebase/auth";
+import { auth } from "@libs/firebase";
 
 export const AdminNavbar = component$(() => {
   const user = useContext(UserContext);
 
   const handleSignOut = $(() => {
-    supabaseClient().auth.signOut();
+    signOut(auth);
   });
 
   return (
@@ -50,7 +51,7 @@ export const AdminNavbar = component$(() => {
         </a>
       </div>
       <div class="navbar-center hidden lg:flex">
-        {user.value && (
+        {user.uid && (
           <ul class="menu menu-horizontal px-1">
             <li>
               <Link href="/admin/photos">Photos</Link>
@@ -65,7 +66,7 @@ export const AdminNavbar = component$(() => {
         )}
       </div>
       <div class="navbar-end">
-        {user.value && (
+        {user.uid && (
           <button
             type="button"
             class="btn btn-outline btn-error"

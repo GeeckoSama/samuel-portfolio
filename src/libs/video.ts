@@ -1,18 +1,17 @@
 export interface Video {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  url: string;
-  preview_url: string;
+  path: string;
   youtube_url: string;
-  create_at: Date;
-  updated_at: Date;
+  create_at: number;
+  update_at: number;
 }
 
 export type Videos = Video[];
 
 export interface Project {
-  id: number;
+  id: string;
   title: string;
   description: string;
   video: Video;
