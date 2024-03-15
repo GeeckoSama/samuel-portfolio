@@ -22,7 +22,7 @@ export const PhotoEditSchema = object({
 
 export type PhotoEditForm = Input<typeof PhotoEditSchema>;
 
-export const useFormLoader = routeLoader$(async (requestEvent) => {
+export const useFormLoader = routeLoader$(async () => {
   /* const supabaseClient = supabaseServer(requestEvent);
   const id = +requestEvent.params.id;
   if (!id) {
@@ -64,7 +64,7 @@ export default component$(() => {
     validate: valiForm$(PhotoEditSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<PhotoEditForm>> = $(async (values) => {
+  const handleSubmit: QRL<SubmitHandler<PhotoEditForm>> = $(async () => {
     /* try {
       const supabase = supabaseClient();
       console.log("Start creating photo");

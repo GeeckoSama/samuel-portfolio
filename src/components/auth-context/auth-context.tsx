@@ -4,7 +4,7 @@ import {
   createContextId,
   useContextProvider,
   useStore,
-  useVisibleTask$,
+  useTask$,
 } from "@builder.io/qwik";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "~/libs/firebase";
@@ -28,7 +28,8 @@ export const AuthContext = component$(() => {
   useContextProvider(UserContext, user);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useTask$(() => {
+    if (!auth) return;
     if (auth.currentUser) {
       console.log("User already logged in");
       user.displayName = auth.currentUser.displayName;

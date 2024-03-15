@@ -1,6 +1,8 @@
+import { isServer } from "@builder.io/qwik/build";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAbjKbi4grjfEO7y148qAWAyhAKtToVCuk",
@@ -13,5 +15,6 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+export const auth = isServer ? null : getAuth(app);
 export const firestore = getFirestore(app);
+export const storage = getStorage(app);

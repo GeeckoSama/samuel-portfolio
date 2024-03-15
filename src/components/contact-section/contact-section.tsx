@@ -2,9 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import Image from "@images/ID.jpg?jsx";
 import { HiPaperAirplaneSolid } from "@qwikest/icons/heroicons";
 
-export interface ContactSectionProps {}
-
-export const ContactSection = component$<ContactSectionProps>((props) => {
+export const ContactSection = component$(() => {
   return (
     <div class="card card-compact mx-auto my-[10vh] max-w-3xl rounded-none bg-base-100 lg:card-side lg:shadow-xl">
       <figure class="mx-auto max-w-xs">

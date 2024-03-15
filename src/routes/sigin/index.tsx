@@ -1,11 +1,11 @@
-import { component$, $ } from "@builder.io/qwik";
+import { $, component$ } from "@builder.io/qwik";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
-import type { SubmitHandler, InitialValues } from "@modular-forms/qwik";
+import { TextInput } from "@components/ui/text-input";
+import type { InitialValues, SubmitHandler } from "@modular-forms/qwik";
 import { useForm, valiForm$ } from "@modular-forms/qwik";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import type { Input } from "valibot";
 import { email, minLength, object, string } from "valibot";
-import { TextInput } from "@components/ui/text-input";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "~/libs/firebase";
 
 const LoginSchema = object({
@@ -35,6 +35,7 @@ export default component$(() => {
 
   const handleSubmit = $<SubmitHandler<LoginForm>>((values) => {
     // Runs on client
+    if (!auth) return;
     console.log("values", values);
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then(() => {

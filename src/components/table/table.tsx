@@ -24,7 +24,7 @@ export const Table = component$<{ data: Photos }>((props) => {
             <tr key={item.id}>
               <th>
                 <img
-                  src={item.url ?? ""}
+                  src={item.path}
                   width={50}
                   height={50}
                   class="rounded bg-base-300"
