@@ -29,8 +29,16 @@ export const AuthContext = component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    if (auth.currentUser) {
+      console.log("User already logged in");
+      user.displayName = auth.currentUser.displayName;
+      user.email = auth.currentUser.email;
+      user.photoURL = auth.currentUser.photoURL;
+      user.uid = auth.currentUser.uid;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (result) => {
-      console.log("Auth state changed", result);
+      console.log("Auth state changed : ", result ? "logged in" : "logged out");
       user.displayName = result ? result.displayName : null;
       user.email = result ? result.email : null;
       user.photoURL = result ? result.photoURL : null;

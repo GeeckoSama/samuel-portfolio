@@ -32,9 +32,11 @@ export default component$(() => {
   const nav = useNavigate();
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (!user.uid) {
-      nav("/sigin");
-    }
+    setTimeout(() => {
+      if (!user.uid) {
+        nav("/sigin");
+      }
+    }, 1000);
   });
   return (
     <>

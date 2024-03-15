@@ -4,6 +4,8 @@ import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
 import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
+import type { Videos } from "@libs/video.type";
+import type { Photos } from "@libs/photo.type";
 
 export interface Photo {
   id: number;
@@ -14,10 +16,50 @@ export interface Photo {
   updated_at: Date;
 }
 
-export const usePhotos = routeLoader$(async (requestEvent) => {});
+export const useFakePhotos = routeLoader$(() => {
+  const photos: Photos = [
+    {
+      id: "1",
+      title: "test",
+      description: "test",
+      path: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
+      create_at: 0,
+      update_at: 0,
+    },
+  ];
+  return photos;
+});
+
+export const useFakeVideos = routeLoader$(() => {
+  const videos: Videos = [
+    {
+      id: "1",
+      title: "COLGATE & HOLD UP",
+      description: `Quatrième clip réalisé, une fois de plus avec Camille Pruvost, où
+      nous fonctionnons depuis en co-direction. Ce projet est le fruit d'une
+      rencontre avec Wana$, rappeur bordelais, qui voulait retranscrire son univers
+      musical avec une approche sensible et esthétique.
+      Le clip, comme le morceau en lui même, est composé de deux parties
+      distinctes, tout de même liées par les paroles, offrant deux ambiances
+      totalement différentes ; une idylle et onirique, puis un réveil brutal dans une
+      réalité plus sombre. Colgate, le soleil et la plage, Hold-Up, polar noir et nuit
+      sombre. La demande de l'artiste était de dépeindre deux séquences évoquées
+      dans son morceau, et les liaient par le visuel dans ce clip.
+      `,
+      path: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/colgate&holdup_preview.png",
+      svg_path:
+        "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
+      youtube_url: "https://www.youtube.com/watch?v=Z4j5rJQMd4c",
+      create_at: new Date().getTime(),
+      update_at: new Date().getTime(),
+    },
+  ];
+  return videos;
+});
 
 export default component$(() => {
-  //const signal = usePhotos();
+  //const signal = useFakePhotos();
+  const videos = useFakeVideos();
   return (
     <>
       <HeroList
@@ -46,31 +88,7 @@ export default component$(() => {
           "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
         ]}
       />
-      <ImageSlideGallery
-        projects={[
-          {
-            title1: "10000",
-            title2: "P",
-            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
-          },
-          {
-            title1: "BON",
-            title2: "EXPORT",
-            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/bonexport_preview.png",
-          },
-          {
-            title1: "Colgate &",
-            title2: "Hold up",
-            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/colgate&holdup_preview.png",
-          },
-          {
-            title1: "Interlude",
-            title2: "Prie",
-            src: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/interlude_prie_preview.png",
-          },
-        ]}
-        sectionTitle="Clips vidéos"
-      />
+      <ImageSlideGallery videos={videos.value} />
       <ContactSection />
     </>
   );

@@ -1,14 +1,17 @@
 import { component$, useContext, $ } from "@builder.io/qwik";
 import { UserContext } from "../auth-context/auth-context";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useNavigate } from "@builder.io/qwik-city";
 import { signOut } from "firebase/auth";
 import { auth } from "@libs/firebase";
 
 export const AdminNavbar = component$(() => {
   const user = useContext(UserContext);
+  const nav = useNavigate();
 
   const handleSignOut = $(() => {
-    signOut(auth);
+    signOut(auth).then(() => {
+      nav("/sigin");
+    });
   });
 
   return (
