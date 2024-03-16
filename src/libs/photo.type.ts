@@ -14,6 +14,7 @@ export interface Album {
   title: string;
   description: string;
   photos: Photo[];
+  localisations: string[];
   create_at: number;
   update_at: number;
 }
