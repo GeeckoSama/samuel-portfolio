@@ -21,6 +21,7 @@ export const Table = component$<{
             <th>Titre</th>
             <th>Description</th>
             {props.albums && <th>Nb photos</th>}
+            {props.albums && <th>Localisations</th>}
             <th>
               <Link href="./create" class="btn btn-ghost">
                 <HiPlusSolid class="h-6 w-6" />

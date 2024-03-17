@@ -18,10 +18,10 @@ interface InputLabelProps {
 export const InputLabel = component$<InputLabelProps>((props) => (
   <>
     {props.label && (
-      <siv class="label" for={props.name}>
+      <div class="label">
         <span class="label-text">{props.label}</span>
         {!props.required && <span class="tabel-text-alt">(optionnel)</span>}
-      </siv>
+      </div>
     )}
   </>
 ));

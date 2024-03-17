@@ -9,17 +9,19 @@ export const TableRowAlbum = component$<{ albums: Albums }>((props) => {
       {props.albums.map((item) => (
         <tr key={item.id}>
           <th>
-            <img
-              src={item.covers[0]}
-              width={50}
-              height={50}
-              class="bg-base-300"
-            />
+            {item.covers && (
+              <img
+                src={item.covers[0]}
+                width={50}
+                height={50}
+                class="bg-base-300"
+              />
+            )}
           </th>
           <td>{item.title}</td>
           <td>{item.description}</td>
-          <td>{item.photos.length}</td>
-          <td>
+          <td>{item.photos ? item.photos.length : 0}</td>
+          <td class="space-x-1">
             {item.localisations.map((localisation, index) => (
               <span key={index} class="badge badge-primary">
                 {localisation}
