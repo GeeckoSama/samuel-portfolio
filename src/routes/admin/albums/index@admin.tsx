@@ -1,27 +1,26 @@
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { Table } from "@components/table/table";
 import { collection, onSnapshot } from "firebase/firestore";
+import { Table } from "@components/table/table";
 import { firestore } from "@libs/firebase";
-import type { Photo, Photos } from "@libs/photo.type";
+import type { Album, Albums } from "@libs/photo.type";
 
 export default component$(() => {
-  //const photos = usePhotos();
-  const photos = useSignal<Photos>([]);
+  const albums = useSignal<Albums>([]);
   useTask$(() => {
-    const collectionRef = collection(firestore, "photos");
+    const collectionRef = collection(firestore, "albums");
     onSnapshot(collectionRef, (snapshot) => {
       console.log("snapshot", snapshot);
       const data = snapshot.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() } as Photo;
+        return { id: doc.id, ...doc.data() } as Album;
       });
-      photos.value = data;
+      albums.value = data;
     });
   });
   return (
     <div class="card mx-auto max-w-7xl bg-base-100 shadow-md">
       <div class="card-body">
-        <h2 class="card-title">Toutes les photos</h2>
-        <Table data={photos.value} />
+        <h2 class="card-title">Toutes les Albums</h2>
+        <Table albums={albums.value} />
       </div>
     </div>
   );

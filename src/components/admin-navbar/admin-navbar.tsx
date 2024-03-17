@@ -40,7 +40,7 @@ export const AdminNavbar = component$(() => {
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
-              <Link href="/photos">Photos</Link>
+              <Link href="/albums">Albums</Link>
             </li>
             <li>
               <Link href="/videos">Vidéos</Link>
@@ -58,7 +58,7 @@ export const AdminNavbar = component$(() => {
         {user.uid && (
           <ul class="menu menu-horizontal px-1">
             <li>
-              <Link href="/admin/photos">Photos</Link>
+              <Link href="/admin/albums">Albums</Link>
             </li>
             <li>
               <Link href="/admin/videos">Vidéos</Link>

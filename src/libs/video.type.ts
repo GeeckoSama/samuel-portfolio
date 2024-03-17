@@ -5,6 +5,7 @@ export interface Video {
   credits: string[];
   localisations?: string[];
   production_date: number;
+  cover: string;
   path: string;
   svg_path: string;
   youtube_url: string;

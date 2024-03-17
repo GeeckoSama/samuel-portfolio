@@ -13,6 +13,7 @@ export interface Album {
   id: string;
   title: string;
   description: string;
+  covers: string[];
   photos: Photo[];
   localisations: string[];
   create_at: number;
