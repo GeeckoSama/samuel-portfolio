@@ -2,7 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import type { Album, Albums } from "@libs/photo.type";
 import { HiEyeSolid, HiPencilSquareSolid } from "@qwikest/icons/heroicons";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "~/libs/firebase";
 
 export const TableRowAlbum = component$<{ albums: Albums }>((props) => {
@@ -13,19 +13,6 @@ export const TableRowAlbum = component$<{ albums: Albums }>((props) => {
     });
   };
 
-  const getPhotoPath = async (album: Album) => {
-    if (!album.covers) return;
-    const docRef = doc(
-      firestore,
-      `albums/${album.id}/photos/${album.covers[0]}`,
-    );
-    const snapshot = await getDoc(docRef);
-    if (snapshot.exists()) {
-      return snapshot.data().path;
-    }
-    return;
-  };
-
   return (
     <>
       {props.albums.map(async (item) => (
@@ -33,7 +20,7 @@ export const TableRowAlbum = component$<{ albums: Albums }>((props) => {
           <th>
             {item.covers && (
               <img
-                src={import.meta.env.PUBLIC_IMGIX_URL + await getPhotoPath(item)}
+                src={import.meta.env.PUBLIC_IMGIX_URL + item.covers[0]}
                 width={50}
                 height={50}
                 class="bg-base-300"

@@ -1,6 +1,6 @@
 import type { NoSerialize, QRL } from "@builder.io/qwik";
 import { $, component$, useSignal } from "@builder.io/qwik";
-import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
+import { Link, routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import { FileInput } from "@components/ui/file-input";
 import { TextInput } from "@components/ui/text-input";
 import type { SubmitHandler } from "@modular-forms/qwik";
@@ -11,6 +11,7 @@ import type { Input } from "valibot";
 import { minLength, object, optional, special, string } from "valibot";
 import { firestore, storage } from "~/libs/firebase";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
+import { HiArrowLeftSolid } from "@qwikest/icons/heroicons";
 
 const isFile = (input: unknown) => input instanceof File;
 
@@ -97,14 +98,16 @@ export default component$(() => {
     }
   });
 
-  const handleReset = $(() => {
-    nav("/admin/photos");
-  });
-
   return (
     <div class="card mx-auto max-w-xl bg-base-100 shadow-md">
       <div class="card-body">
-        <h2 class="card-title">Créer une photo</h2>
+        <div class="flex space-x-2">
+          <Link href="../" class="btn btn-ghost btn-sm">
+            <HiArrowLeftSolid class="h-6 w-6" />
+          </Link>
+          <h2 class="card-title">Modification d'une photo</h2>
+        </div>
+
         <Form onSubmit$={handleSubmit} class="flex flex-col gap-2">
           <Field name="id" type="string">
             {(field) => <input type="hidden" {...field} />}
@@ -158,7 +161,7 @@ export default component$(() => {
             </button>
             <button
               type="reset"
-              onClick$={handleReset}
+              onClick$={() => nav("../")}
               class="btn btn-outline btn-error"
             >
               Annuler

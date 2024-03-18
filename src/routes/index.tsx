@@ -1,20 +1,25 @@
-import { component$ } from "@builder.io/qwik";
+import { Resource, component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
-import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
+import type { Album, Photos } from "@libs/photo.type";
 import type { Videos } from "@libs/video.type";
-import type { Photos } from "@libs/photo.type";
+import { collection, getDocs } from "firebase/firestore";
+import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
+import { firestore } from "~/libs/firebase";
 
-export interface Photo {
-  id: number;
-  title: string;
-  description: string;
-  url: string;
-  create_at: Date;
-  updated_at: Date;
-}
+export const useAlbums = routeLoader$(() => {
+  return async () => {
+    const collectionRef = collection(firestore, "albums");
+    const albums = await getDocs(collectionRef).then((snapshot) => {
+      return snapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() } as Album;
+      });
+    });
+    return albums;
+  };
+});
 
 export const useFakePhotos = routeLoader$(() => {
   const photos: Photos = [
@@ -63,6 +68,7 @@ export const useFakeVideos = routeLoader$(() => {
 
 export default component$(() => {
   //const signal = useFakePhotos();
+  const albums = useAlbums();
   const videos = useFakeVideos();
   return (
     <>
@@ -83,15 +89,22 @@ export default component$(() => {
         ]}
         sectionTitle="Samuel freret"
       />
-      <SectionAlbumPhoto
-        title="Production photographique"
-        subtitle="Paysage"
-        images={[
-          "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
-          "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
-          "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
-        ]}
+      <Resource
+        value={albums}
+        onResolved={(data) => (
+          <>
+            {data.map((album) => (
+              <SectionAlbumPhoto
+                key={album.id}
+                title="Production photographique"
+                subtitle={album.title}
+                images={album.covers ?? []}
+              />
+            ))}
+          </>
+        )}
       />
+
       <ImageSlideGallery videos={videos.value} />
       <ContactSection />
     </>

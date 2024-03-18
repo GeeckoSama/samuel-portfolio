@@ -106,7 +106,7 @@ export default component$(() => {
   return (
     <div class="card mx-auto max-w-xl bg-base-100 shadow-md">
       <div class="card-body">
-        <div class="space-x-2 flex">
+        <div class="flex space-x-2">
           <Link class="btn btn-ghost" href="../">
             <HiArrowLeftSolid class="h-6 w-6" />
           </Link>
@@ -194,10 +194,7 @@ export default component$(() => {
                           {field.value && (
                             <Image
                               src={
-                                import.meta.env.PUBLIC_IMGIX_URL +
-                                photos.value.find((photo) => {
-                                  return photo.id === field.value;
-                                })?.path
+                                import.meta.env.PUBLIC_IMGIX_URL + field.value
                               }
                               layout="constrained"
                               width={56}
@@ -209,7 +206,7 @@ export default component$(() => {
                             value={field.value}
                             options={photos.value.map((photo) => ({
                               label: photo.title,
-                              value: photo.id,
+                              value: photo.path,
                             }))}
                             error={field.error}
                           />
