@@ -3,7 +3,7 @@ import { $, component$, useSignal } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
 import { TextInput } from "@components/ui/text-input";
 import { firestore } from "@libs/firebase";
-import type { Album } from "@libs/photo.type";
+import type { Photo } from "@libs/photo.type";
 import type { SubmitHandler } from "@modular-forms/qwik";
 import {
   insert,
@@ -12,10 +12,18 @@ import {
   valiForm$,
   type InitialValues,
 } from "@modular-forms/qwik";
-import { HiTrashSolid } from "@qwikest/icons/heroicons";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { HiArrowLeftSolid, HiTrashSolid } from "@qwikest/icons/heroicons";
+import { Image } from "@unpic/qwik";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import type { Input } from "valibot";
 import { array, minLength, object, string } from "valibot";
+import { Select } from "~/components/ui/select";
 
 export const AlbumSchema = object({
   id: string(),
@@ -23,6 +31,9 @@ export const AlbumSchema = object({
   description: string([minLength(1, "La description est requise")]),
   localisations: array(string([minLength(1, "La localisation est requis")]), [
     minLength(1, "Au moins une localisation"),
+  ]),
+  covers: array(string([minLength(1, "La couverture est requise")]), [
+    minLength(1, "Au moins une couverture"),
   ]),
 });
 
@@ -39,8 +50,7 @@ export const useFormLoader = routeLoader$<InitialValues<AlbumForm>>(
         title: data.title,
         description: data.description,
         localisations: data.localisations,
-        covers: data.covers,
-        update_at: data.update_at,
+        covers: data.covers ?? [],
       };
     }
     return {
@@ -48,48 +58,72 @@ export const useFormLoader = routeLoader$<InitialValues<AlbumForm>>(
       title: "",
       description: "",
       localisations: [],
+      covers: [],
     };
   },
 );
 
+export const usePhotos = routeLoader$(async (requestEvent) => {
+  const photosRef = collection(
+    firestore,
+    `albums/${requestEvent.params.albumId}/photos`,
+  );
+  return await getDocs(photosRef).then((snapshot) =>
+    snapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() } as Photo;
+    }),
+  );
+});
+
 export default component$(() => {
   const loading = useSignal(false);
+  const photos = usePhotos();
   const [albumForm, { Form, Field, FieldArray }] = useForm<AlbumForm>({
     loader: useFormLoader(),
-    fieldArrays: ["localisations"],
+    fieldArrays: ["localisations", "covers"],
     validate: valiForm$(AlbumSchema),
   });
 
   const handleSubmit: QRL<SubmitHandler<AlbumForm>> = $(async (values) => {
     loading.value = true;
-    console.log("Start creating album");
-    const albumsRef = collection(firestore, "albums");
-    addDoc(albumsRef, {
-      ...values,
-      create_at: Date.now(),
-      update_at: Date.now(),
-    } as Album)
-      .then(() => {
-        console.log("Album created");
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      })
-      .finally(() => {
-        loading.value = false;
+    try {
+      console.log("Start updating album ", values.id);
+      console.log("values", values);
+      const albumsRef = doc(firestore, `albums/${values.id}`);
+      await updateDoc(albumsRef, {
+        title: values.title,
+        description: values.description,
+        localisations: values.localisations,
+        covers: values.covers,
+        update_at: Date.now(),
       });
+      console.log("Album updated");
+    } catch (error) {
+      console.error("Error updating album: ", error);
+    }
+    loading.value = false;
   });
   return (
     <div class="card mx-auto max-w-xl bg-base-100 shadow-md">
       <div class="card-body">
-        <h2 class="card-title">Modification de l'Album</h2>
+        <div class="space-x-2 flex">
+          <Link class="btn btn-ghost" href="../">
+            <HiArrowLeftSolid class="h-6 w-6" />
+          </Link>
+          <h2 class="card-title">Modification de l'Album</h2>
+        </div>
+
         <Form onSubmit$={handleSubmit} class="flex flex-col gap-2">
+          <Field name="id">
+            {(field, props) => <input {...props} type="hidden" />}
+          </Field>
           <Field name="title">
             {(field, props) => (
               <TextInput
                 class="input input-bordered w-full"
                 {...props}
                 label="Titre"
+                error={field.error}
                 required={true}
                 type="text"
                 value={field.value}
@@ -117,6 +151,7 @@ export default component$(() => {
                           <TextInput
                             class="input input-bordered w-full"
                             {...props}
+                            error={field.error}
                             type="text"
                             value={field.value}
                           />
@@ -142,6 +177,64 @@ export default component$(() => {
                   }
                 >
                   Ajouter une localisation
+                </button>
+              </div>
+            )}
+          </FieldArray>
+
+          <FieldArray name="covers">
+            {(fieldArray) => (
+              <div class="flex flex-col justify-end space-y-2">
+                <label class="mb-4">Couvertures</label>
+                {fieldArray.items.map((item, index) => (
+                  <div key={item}>
+                    <Field name={`${fieldArray.name}.${index}`}>
+                      {(field, props) => (
+                        <div class="flex flex-row gap-2">
+                          {field.value && (
+                            <Image
+                              src={
+                                import.meta.env.PUBLIC_IMGIX_URL +
+                                photos.value.find((photo) => {
+                                  return photo.id === field.value;
+                                })?.path
+                              }
+                              layout="constrained"
+                              width={56}
+                              height={56}
+                            />
+                          )}
+                          <Select
+                            {...props}
+                            value={field.value}
+                            options={photos.value.map((photo) => ({
+                              label: photo.title,
+                              value: photo.id,
+                            }))}
+                            error={field.error}
+                          />
+                          <button
+                            type="button"
+                            class="btn btn-ghost "
+                            onClick$={() =>
+                              remove(albumForm, fieldArray.name, { at: index })
+                            }
+                          >
+                            <HiTrashSolid class="h-6 w-6" />
+                          </button>
+                        </div>
+                      )}
+                    </Field>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  class="btn btn-ghost"
+                  onClick$={() =>
+                    insert(albumForm, fieldArray.name, { value: "" })
+                  }
+                >
+                  Ajouter une couverture
                 </button>
               </div>
             )}

@@ -1,20 +1,24 @@
 import type { NoSerialize, QRL } from "@builder.io/qwik";
-import { $, component$ } from "@builder.io/qwik";
+import { $, component$, useSignal } from "@builder.io/qwik";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
-import type { SubmitHandler } from "@modular-forms/qwik";
-import { useForm, valiForm$, type InitialValues } from "@modular-forms/qwik";
-import type { Input } from "valibot";
-import { minLength, number, object, optional, special, string } from "valibot";
 import { FileInput } from "@components/ui/file-input";
 import { TextInput } from "@components/ui/text-input";
+import type { SubmitHandler } from "@modular-forms/qwik";
+import { useForm, valiForm$, type InitialValues } from "@modular-forms/qwik";
+import { Image } from "@unpic/qwik";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import type { Input } from "valibot";
+import { minLength, object, optional, special, string } from "valibot";
+import { firestore, storage } from "~/libs/firebase";
+import { deleteObject, ref, uploadBytes } from "firebase/storage";
 
 const isFile = (input: unknown) => input instanceof File;
 
 export const PhotoEditSchema = object({
-  id: number(),
+  id: string(),
   title: string([minLength(1, "Le titre est requis")]),
   description: string([minLength(1, "La description est requise")]),
-  photo_url: string(),
+  path: string(),
   file: object({
     item: optional(special<NoSerialize<File>>(isFile)),
   }),
@@ -22,88 +26,75 @@ export const PhotoEditSchema = object({
 
 export type PhotoEditForm = Input<typeof PhotoEditSchema>;
 
-export const useFormLoader = routeLoader$(async () => {
-  /* const supabaseClient = supabaseServer(requestEvent);
-  const id = +requestEvent.params.id;
-  if (!id) {
-    throw new Error("id is required");
-  }
-  const { data, error } = await supabaseClient
-    .from("photos")
-    .select("*")
-    .eq("id", id)
-    .single();
-  if (error) {
-    throw error;
+export const useFormLoader = routeLoader$(async (requestEvent) => {
+  const albumId = requestEvent.params.albumId;
+  const photoId = requestEvent.params.photoId;
+  const docRef = doc(firestore, `albums/${albumId}/photos/${photoId}`);
+  const snapshot = await getDoc(docRef);
+  if (snapshot.exists()) {
+    return {
+      id: snapshot.id,
+      title: snapshot.data().title,
+      description: snapshot.data().description,
+      path: snapshot.data().path,
+      file: {
+        item: undefined,
+      },
+    } as InitialValues<PhotoEditForm>;
   }
   return {
-    id: id,
-    title: data.title,
-    description: data.description,
-    photo_url: data.url,
-    file: {
-      item: undefined,
-    },
-  } as InitialValues<PhotoEditForm>; */
-  return {
-    id: 0,
+    id: "",
     title: "",
     description: "",
-    photo_url: "",
+    path: "",
     file: {
       item: undefined,
     },
   } as InitialValues<PhotoEditForm>;
 });
 
+export const useAlbumId = routeLoader$((requestEvent) => {
+  return requestEvent.params.albumId;
+});
+
 export default component$(() => {
   const nav = useNavigate();
-
+  const loading = useSignal(false);
+  const albumId = useAlbumId();
   const [photoEditForm, { Form, Field }] = useForm<PhotoEditForm>({
     loader: useFormLoader(),
     validate: valiForm$(PhotoEditSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<PhotoEditForm>> = $(async () => {
-    /* try {
-      const supabase = supabaseClient();
-      console.log("Start creating photo");
-      console.log("values", values);
-      const file = values.file.item;
-      let photo_url = values.photo_url;
-      if (file !== undefined) {
-        const uploadedFile = await supabase.storage
-          .from("medias")
-          .upload("photos/" + file.name, file!);
-        console.log("uploadedFile", uploadedFile);
-        if (uploadedFile.error) {
-          throw uploadedFile.error;
-        }
-        const urlFile = await supabase.storage
-          .from("medias")
-          .getPublicUrl(uploadedFile.data.path, { download: values.title });
-        console.log("urlFile", urlFile);
-        photo_url = urlFile.data.publicUrl;
+  const handleSubmit: QRL<SubmitHandler<PhotoEditForm>> = $(async (values) => {
+    console.log(values);
+    loading.value = true;
+    try {
+      if (values.file.item) {
+        const filePath = `albums/${albumId.value}/${values.file.item.name}`;
+        const storageRef = ref(storage, filePath);
+        await uploadBytes(storageRef, values.file.item);
+        const deleteRef = ref(storage, values.path);
+        await deleteObject(deleteRef);
+        values.path = filePath;
       }
 
-      const { error } = await supabase
-        .from("photos")
-        .update({
-          title: values.title,
-          description: values.description,
-          url: photo_url,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", values.id);
-
-      if (error) {
-        throw error;
-      }
-      console.log("Photo updated with success");
-      //nav("/admin/photos");
+      const imageRef = doc(
+        firestore,
+        `albums/${albumId.value}/photos/${values.id}`,
+      );
+      await updateDoc(imageRef, {
+        title: values.title,
+        description: values.description,
+        path: values.path,
+        update_at: Date.now(),
+      });
+      console.log("Photo updated with id :", values.id);
+      loading.value = false;
+      nav("../");
     } catch (error) {
-      console.error("Error uploading file", error);
-    } */
+      console.error(error);
+    }
   });
 
   const handleReset = $(() => {
@@ -115,7 +106,7 @@ export default component$(() => {
       <div class="card-body">
         <h2 class="card-title">Créer une photo</h2>
         <Form onSubmit$={handleSubmit} class="flex flex-col gap-2">
-          <Field name="id" type="number">
+          <Field name="id" type="string">
             {(field) => <input type="hidden" {...field} />}
           </Field>
           <Field name="title">
@@ -139,12 +130,13 @@ export default component$(() => {
               ></textarea>
             )}
           </Field>
-          <Field name="photo_url">
+          <Field name="path">
             {(field) => (
               <>
-                <img
-                  src={field.value}
-                  class="mx-auto rounded bg-base-300 shadow"
+                <Image
+                  src={import.meta.env.PUBLIC_IMGIX_URL + field.value}
+                  class="mx-auto bg-base-300"
+                  layout="constrained"
                   width={250}
                   height={250}
                 />

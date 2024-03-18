@@ -1,9 +1,17 @@
 import { Resource, component$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { Link, routeLoader$ } from "@builder.io/qwik-city";
 import { Table } from "@components/table/table";
 import { firestore } from "@libs/firebase";
-import type { Photo } from "@libs/photo.type";
-import { collection, getDocs } from "firebase/firestore";
+import type { Album, Photo } from "@libs/photo.type";
+import { HiArrowLeftSolid } from "@qwikest/icons/heroicons";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+
+export const useAlbum = routeLoader$(async (requestEvent) => {
+  const albumId = requestEvent.params.albumId;
+  const docRef = doc(firestore, `albums/${albumId}`);
+  const snapshot = await getDoc(docRef);
+  return { id: snapshot.id, ...snapshot.data() } as Album;
+});
 
 export const usePhotos = routeLoader$(async (requestEvent) => {
   return async () => {
@@ -18,11 +26,17 @@ export const usePhotos = routeLoader$(async (requestEvent) => {
 });
 
 export default component$(() => {
+  const album = useAlbum();
   const photos = usePhotos();
   return (
     <div class="card mx-auto max-w-7xl bg-base-100 shadow-md">
       <div class="card-body">
-        <h2 class="card-title">Toutes les photos</h2>
+        <div class="flex space-x-1">
+          <Link href="/admin/albums" class="btn btn-ghost">
+            <HiArrowLeftSolid class="h-6 w-6" />
+          </Link>
+          <h2 class="card-title">Photos de l'album {album.value.title}</h2>
+        </div>
         <Resource
           value={photos}
           onResolved={(data) => <Table photos={data} />}

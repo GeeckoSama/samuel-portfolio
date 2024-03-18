@@ -2,6 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import type { Photos } from "@libs/photo.type";
 import { HiPencilSquareSolid } from "@qwikest/icons/heroicons";
+import { Image } from "@unpic/qwik";
 
 export const TableRowPhoto = component$<{ photos: Photos }>((props) => {
   return (
@@ -9,7 +10,13 @@ export const TableRowPhoto = component$<{ photos: Photos }>((props) => {
       {props.photos.map((item) => (
         <tr key={item.id}>
           <th>
-            <img src={item.path} width={50} height={50} class="bg-base-300" />
+            <Image
+              src={import.meta.env.PUBLIC_IMGIX_URL + item.path}
+              layout="constrained"
+              class="h-14 w-auto bg-base-300"
+              height={56}
+              width={56}
+            />
           </th>
           <td>{item.title}</td>
           <td>{item.description}</td>

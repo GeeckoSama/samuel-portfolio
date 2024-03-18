@@ -15,6 +15,7 @@ export interface Album {
   description: string;
   covers?: string[];
   photos?: Photo[];
+  nbPhotos?: number;
   localisations: string[];
   create_at: number;
   update_at: number;

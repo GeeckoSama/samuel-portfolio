@@ -50,6 +50,7 @@
   "dependencies": {
     "@modular-forms/qwik": "^0.23.1",
     "@qwikest/icons": "^0.0.13",
+    "@unpic/qwik": "^0.0.44",
     "firebase": "^10.9.0",
     "gsap": "^3.12.5",
     "valibot": "^0.29.0"
