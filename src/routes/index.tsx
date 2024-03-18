@@ -46,6 +46,10 @@ export const useFakeVideos = routeLoader$(() => {
       sombre. La demande de l'artiste était de dépeindre deux séquences évoquées
       dans son morceau, et les liaient par le visuel dans ce clip.
       `,
+      credits: ["Réalisation : Samuel Freret & Camille Pruvost"],
+      localisations: ["Bordeaux"],
+      production_date: new Date().getTime(),
+      cover: "",
       path: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/colgate&holdup_preview.png",
       svg_path:
         "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
