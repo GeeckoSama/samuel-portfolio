@@ -1,22 +1,25 @@
 import type { NoSerialize, QRL } from "@builder.io/qwik";
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
-import type { InitialValues, SubmitHandler } from "@modular-forms/qwik";
-import { insert, remove, useForm, valiForm$ } from "@modular-forms/qwik";
-import { HiArrowLeftSolid, HiTrashSolid } from "@qwikest/icons/heroicons";
-import { addDoc, collection } from "firebase/firestore";
-import type { UploadResult } from "firebase/storage";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import type { Input } from "valibot";
-import { array, minLength, object, optional, special, string } from "valibot";
 import { FileInput } from "@components/ui/file-input";
 import { TextAreaInput } from "@components/ui/text-area-input";
 import { TextInput } from "@components/ui/text-input";
 import { firestore, storage } from "@libs/firebase";
+import type { Video } from "@libs/video.type";
+import type { InitialValues, SubmitHandler } from "@modular-forms/qwik";
+import { insert, remove, useForm, valiForm$ } from "@modular-forms/qwik";
+import { HiArrowLeftSolid, HiTrashSolid } from "@qwikest/icons/heroicons";
+import { Image } from "@unpic/qwik";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import type { UploadResult } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import type { Input } from "valibot";
+import { array, minLength, object, optional, special, string } from "valibot";
 
 const isFile = (input: unknown) => input instanceof File;
 
 export const VideoSchema = object({
+  id: string(),
   title: string([minLength(1, "Le titre est requis")]),
   description: string([minLength(1, "La description est requise")]),
   credits: array(string([minLength(1, "Le crédit est requis")]), [
@@ -29,34 +32,49 @@ export const VideoSchema = object({
   ),
   production_date: string(),
   cover: object({
-    item: special<NoSerialize<File>>(isFile),
+    item: optional(special<NoSerialize<File>>(isFile)),
+    path: optional(string()),
   }),
   path: object({
-    item: special<NoSerialize<File>>(isFile),
+    item: optional(special<NoSerialize<File>>(isFile)),
+    path: optional(string()),
   }),
   svg_path: object({
-    item: special<NoSerialize<File>>(isFile),
+    item: optional(special<NoSerialize<File>>(isFile)),
+    path: optional(string()),
   }),
   youtube_url: string([minLength(1, "L'url youtube est requise")]),
 });
 
 export type VideoForm = Input<typeof VideoSchema>;
 
-export const useFormLoader = routeLoader$<InitialValues<VideoForm>>(() => {
-  return {
-    title: "",
-    description: "",
-    credits: [],
-    localisations: [],
-    production_date: new Date(Date.now()).toISOString().split("T")[0],
-    cover: { item: undefined },
-    path: { item: undefined },
-    svg_path: { item: undefined },
-    youtube_url: "",
-  };
-});
+export const useFormLoader = routeLoader$<InitialValues<VideoForm>>(
+  async (requestEvent) => {
+    const id = requestEvent.params.id;
+    if (!id) throw new Error("Missing id");
+    const docRef = doc(firestore, `videos/${id}`);
+    const snapshot = await getDoc(docRef);
+    if (!snapshot.exists()) throw new Error("Document does not exist");
+    const video = { id: snapshot.id, ...snapshot.data() } as Video;
+    return {
+      id: video.id,
+      title: video.title,
+      description: video.description,
+      credits: video.credits,
+      localisations: video.localisations,
+      production_date: new Date(video.production_date)
+        .toISOString()
+        .split("T")[0],
+      cover: { item: undefined, path: video.cover },
+      path: { item: undefined, path: video.path },
+      svg_path: { item: undefined, path: video.svg_path },
+      youtube_url: video.youtube_url,
+    };
+  },
+);
 
 export default component$(() => {
+  const cdn = import.meta.env.PUBLIC_IMGIX_URL;
   const loading = useSignal(false);
   const [videoForm, { Form, Field, FieldArray }] = useForm<VideoForm>({
     loader: useFormLoader(),
@@ -68,52 +86,66 @@ export default component$(() => {
     console.log(values);
     loading.value = true;
     try {
-      const uploads: Promise<UploadResult>[] = [];
+      const uploads: Array<Promise<UploadResult> | null> = [];
       /* upload cover */
-      if (!values.cover.item)
-        throw new Error("Aucune couverture n'a été sélectionnée");
-      const coverRef = ref(
-        storage,
-        `videos/${values.title}/${values.cover.item.name}`,
-      );
-      uploads.push(uploadBytes(coverRef, values.cover.item));
+      if (!values.cover.item) {
+        console.log("Aucune couverture n'a été sélectionnée");
+        uploads.push(null);
+      } else {
+        const coverRef = ref(
+          storage,
+          `videos/${values.title}/${values.cover.item.name}`,
+        );
+        uploads.push(uploadBytes(coverRef, values.cover.item));
+      }
+
       /* upload path */
-      if (!values.path.item)
-        throw new Error("Aucune vidéo n'a été sélectionnée");
-      const pathRef = ref(
-        storage,
-        `videos/${values.title}/${values.path.item.name}`,
-      );
-      uploads.push(uploadBytes(pathRef, values.path.item));
+      if (!values.path.item) {
+        console.log("Aucune vidéo n'a été sélectionnée");
+        uploads.push(null);
+      } else {
+        const pathRef = ref(
+          storage,
+          `videos/${values.title}/${values.path.item.name}`,
+        );
+        uploads.push(uploadBytes(pathRef, values.path.item));
+      }
+
       /* upload svg */
-      if (!values.svg_path.item)
-        throw new Error("Aucun svg n'a été sélectionné");
-      const svgRef = ref(
-        storage,
-        `videos/${values.title}/${values.svg_path.item.name}`,
-      );
-      uploads.push(uploadBytes(svgRef, values.svg_path.item));
+      if (!values.svg_path.item) {
+        console.log("Aucun svg n'a été sélectionné");
+        uploads.push(null);
+      } else {
+        const svgRef = ref(
+          storage,
+          `videos/${values.title}/${values.svg_path.item.name}`,
+        );
+        uploads.push(uploadBytes(svgRef, values.svg_path.item));
+      }
 
       const [cover, path, svg] = await Promise.all(uploads);
-      const videoUrl = await getDownloadURL(path.ref);
+      let videoUrl: string | undefined = undefined;
+      if (path) {
+        videoUrl = await getDownloadURL(path.ref);
+      }
       console.log(cover, path, svg);
 
-      const videoRef = collection(firestore, "videos");
-      await addDoc(videoRef, {
+      const videoRef = doc(firestore, `videos/${values.id}`);
+      await updateDoc(videoRef, {
         title: values.title,
         description: values.description,
         credits: values.credits,
         localisations: values.localisations,
         production_date: new Date(values.production_date).getTime(),
-        cover: cover.ref.fullPath,
-        path: videoUrl,
-        svg_path: svg.ref.fullPath,
+        cover: cover ? cover.ref.fullPath : values.cover.path,
+        path: videoUrl ? videoUrl : values.path.path,
+        svg_path: svg ? svg.ref.fullPath : values.svg_path.path,
         youtube_url: values.youtube_url,
         create_at: Date.now(),
         update_at: Date.now(),
       });
       loading.value = false;
-      console.log("Video created");
+      console.log("Video updated successfully.");
     } catch (error) {
       console.error(error);
       loading.value = false;
@@ -130,6 +162,10 @@ export default component$(() => {
           <h2 class="card-title">Création d'une vidéo</h2>
         </div>
         <Form onSubmit$={handleSubmit} class="flex flex-col gap-2">
+          <Field name="id" type="string">
+            {(field, props) => <input {...props} type="hidden" />}
+          </Field>
+
           <Field name="title" type="string">
             {(field, props) => (
               <TextInput
@@ -253,6 +289,19 @@ export default component$(() => {
             )}
           </Field>
 
+          <Field name="cover.path" type="string">
+            {(field, props) => (
+              <div>
+                <input {...props} type="hidden" />
+                <Image
+                  src={cdn + field.value}
+                  layout="constrained"
+                  alt="cover"
+                  class="mx-auto h-auto w-full"
+                />
+              </div>
+            )}
+          </Field>
           <Field name="cover.item" type="File">
             {(field, props) => (
               <FileInput
@@ -260,12 +309,22 @@ export default component$(() => {
                 label="Couverture"
                 value={field.value}
                 accept="image/*"
-                required={true}
+                required={false}
                 error={field.error}
               />
             )}
           </Field>
 
+          <Field name="path.path" type="string">
+            {(field, props) => (
+              <div>
+                <input {...props} type="hidden" />
+                <video controls muted class="h-full w-full object-cover">
+                  <source src={field.value} type="video/mp4" />
+                </video>
+              </div>
+            )}
+          </Field>
           <Field name="path.item" type="File">
             {(field, props) => (
               <FileInput
@@ -273,12 +332,25 @@ export default component$(() => {
                 label="Vidéo"
                 value={field.value}
                 accept="video/*"
-                required={true}
+                required={false}
                 error={field.error}
               />
             )}
           </Field>
 
+          <Field name="svg_path.path" type="string">
+            {(field, props) => (
+              <div>
+                <input {...props} type="hidden" />
+                <Image
+                  src={cdn + field.value}
+                  layout="constrained"
+                  alt="cover"
+                  class="mx-auto h-auto w-full"
+                />
+              </div>
+            )}
+          </Field>
           <Field name="svg_path.item" type="File">
             {(field, props) => (
               <FileInput
@@ -286,7 +358,7 @@ export default component$(() => {
                 label="SVG Mask"
                 value={field.value}
                 accept="svg/*"
-                required={true}
+                required={false}
                 error={field.error}
               />
             )}
@@ -312,7 +384,7 @@ export default component$(() => {
               disabled={loading.value}
             >
               {loading.value && <span class="loading loading-spinner"></span>}
-              Créer la vidéo
+              Modifié la vidéo
             </button>
             <Link href="../" class="btn btn-outline btn-error">
               Annuler
