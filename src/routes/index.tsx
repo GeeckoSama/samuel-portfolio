@@ -1,37 +1,14 @@
 import { Resource, component$ } from "@builder.io/qwik";
-import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
+import { type DocumentHead } from "@builder.io/qwik-city";
 import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
-import type { Album } from "@libs/photo.type";
-import type { Video } from "@libs/video.type";
-import { collection, getDocs } from "firebase/firestore";
 import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
-import { firestore } from "~/libs/firebase";
+import { useAlbums } from "@libs/album-loaders";
+import { useVideos } from "@libs/video-loaders";
 
-export const useAlbums = routeLoader$(() => {
-  return async () => {
-    const collectionRef = collection(firestore, "albums");
-    const albums = await getDocs(collectionRef).then((snapshot) => {
-      return snapshot.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() } as Album;
-      });
-    });
-    return albums;
-  };
-});
-
-export const useVideos = routeLoader$(() => {
-  return async () => {
-    const collectionRef = collection(firestore, "videos");
-    const videos = await getDocs(collectionRef).then((snapshot) => {
-      return snapshot.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() } as Video;
-      });
-    });
-    return videos;
-  };
-});
+export { useAlbums } from "@libs/album-loaders";
+export { useVideos } from "@libs/video-loaders";
 
 export default component$(() => {
   const albums = useAlbums();
@@ -59,21 +36,24 @@ export default component$(() => {
         value={albums}
         onResolved={(data) => (
           <>
-            {data.map((album) => (
-              <SectionAlbumPhoto
-                key={album.id}
-                title="Production photographique"
-                subtitle={album.title}
-                images={album.covers ?? []}
-              />
-            ))}
+            {data &&
+              data.map((album) => (
+                <SectionAlbumPhoto
+                  key={album.id}
+                  title="Production photographique"
+                  subtitle={album.title}
+                  images={album.covers ?? []}
+                />
+              ))}
           </>
         )}
+        onRejected={(error) => <div>{error.message}</div>}
       />
 
       <Resource
         value={videos}
-        onResolved={(data) => <ImageSlideGallery videos={data} />}
+        onResolved={(data) => data && <ImageSlideGallery videos={data} />}
+        onRejected={(error) => <div>{error.message}</div>}
       />
 
       <ContactSection />
