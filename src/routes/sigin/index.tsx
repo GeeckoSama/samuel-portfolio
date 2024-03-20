@@ -1,9 +1,17 @@
-import { $, component$ } from "@builder.io/qwik";
+import { $, component$, useTask$ } from "@builder.io/qwik";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
+import { isServer } from "@builder.io/qwik/build";
 import { TextInput } from "@components/ui/text-input";
 import type { InitialValues, SubmitHandler } from "@modular-forms/qwik";
 import { useForm, valiForm$ } from "@modular-forms/qwik";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { SiGoogle } from "@qwikest/icons/simpleicons";
+import {
+  GoogleAuthProvider,
+  getRedirectResult,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import type { Input } from "valibot";
 import { email, minLength, object, string } from "valibot";
 import { auth } from "~/libs/firebase";
@@ -33,6 +41,16 @@ export default component$(() => {
     validate: valiForm$(LoginSchema),
   });
 
+  useTask$(() => {
+    if (!auth) return;
+    getRedirectResult(auth).then((result) => {
+      if (result) {
+        console.log("User signed in with redirect");
+        nav("/admin");
+      }
+    });
+  });
+
   const handleSubmit = $<SubmitHandler<LoginForm>>((values) => {
     // Runs on client
     if (!auth) return;
@@ -47,6 +65,16 @@ export default component$(() => {
       });
   });
 
+  const handleSigninWithGoogle = $(() => {
+    console.log("Signin with Google");
+    if (!auth) return;
+    if (window.innerWidth < 768) {
+      signInWithRedirect(auth, new GoogleAuthProvider());
+    } else {
+      signInWithPopup(auth, new GoogleAuthProvider()).then(() => nav("/admin"));
+    }
+  });
+
   const handleReset = $(() => {
     nav("/");
   });
@@ -56,6 +84,12 @@ export default component$(() => {
       <div class="card mx-auto max-w-xl grow bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title mb-4">Se connecter</h2>
+          <div class="flex justify-center">
+            <button class="btn btn-ghost" onClick$={handleSigninWithGoogle}>
+              <SiGoogle class="h-6 w-6" />
+            </button>
+          </div>
+          <div class="divider">Ou</div>
           <Form onSubmit$={handleSubmit} class="flex flex-col gap-4">
             <Field name="email">
               {(field, props) => (
