@@ -50,7 +50,7 @@ export const Project = component$<{ video: Video }>((props) => {
   3;
   return (
     <Link
-      href="#"
+      href={`/videos/${props.video.id}`}
       class="flex w-full cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] last-of-type:border-b dark:border-neutral-100"
       onMouseEnter$={handleMouseEnter}
       onMouseLeave$={handleMouseLeave}
