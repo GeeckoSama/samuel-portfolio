@@ -1,5 +1,6 @@
-import { $, component$, useTask$ } from "@builder.io/qwik";
+import { $, component$, useVisibleTask$ } from "@builder.io/qwik";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
+import { isServer } from "@builder.io/qwik/build";
 import { TextInput } from "@components/ui/text-input";
 import type { InitialValues, SubmitHandler } from "@modular-forms/qwik";
 import { useForm, valiForm$ } from "@modular-forms/qwik";
@@ -40,7 +41,8 @@ export default component$(() => {
     validate: valiForm$(LoginSchema),
   });
 
-  useTask$(() => {
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
     if (!auth) return;
     getRedirectResult(auth).then((result) => {
       if (result) {
@@ -66,7 +68,7 @@ export default component$(() => {
 
   const handleSigninWithGoogle = $(() => {
     console.log("Signin with Google");
-    if (!auth) return;
+    if (!auth || isServer) return;
     if (window.innerWidth < 768) {
       signInWithRedirect(auth, new GoogleAuthProvider());
     } else {
