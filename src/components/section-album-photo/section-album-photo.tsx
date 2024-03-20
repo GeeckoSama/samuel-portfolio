@@ -13,14 +13,19 @@ export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
   (props) => {
     const cdn = import.meta.env.PUBLIC_IMGIX_URL;
     const containerRef = useSignal<Element>();
-    const titleRef = useSignal<Element>();
     const lettersRefs = useSignal<Element[]>([]);
     const imagesRefs = useSignal<Element[]>([]);
 
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
-      gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
+        if (
+          !containerRef.value ||
+          lettersRefs.value.length === 0 ||
+          imagesRefs.value.length === 0
+        )
+          return;
+        gsap.registerPlugin(ScrollTrigger);
         const tl = gsap
           .timeline({
             scrollTrigger: {
@@ -30,7 +35,6 @@ export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
               scrub: true,
             },
           })
-          .to(titleRef, { y: -50 }, 0)
           .to(imagesRefs.value[1], { y: -150 }, 0)
           .to(imagesRefs.value[2], { y: -255 }, 0);
         lettersRefs.value.forEach((letter) => {
@@ -49,7 +53,7 @@ export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
     return (
       <div ref={containerRef} class="my-[10vh] min-h-screen">
         <div class="ml-[10vw]">
-          <h2 ref={titleRef} class="m-0 mt-2 text-xl font-semibold uppercase">
+          <h2 class="m-0 mt-2 text-xl font-semibold uppercase">
             {props.title}
           </h2>
           <div>
@@ -76,7 +80,7 @@ export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
           >
             <Image
               src={cdn + props.images[0]}
-              layout="constrained"
+              layout="constrained" height={1080} width={920}
               class="h-full w-auto object-cover object-center shadow-lg lg:h-auto lg:w-auto"
             />
           </div>
@@ -86,7 +90,7 @@ export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
           >
             <Image
               src={cdn + props.images[1]}
-              layout="constrained"
+              layout="constrained" height={700} width={900}
               class=" h-full w-auto  object-cover object-center shadow-xl"
             />
           </div>
@@ -96,7 +100,7 @@ export const SectionAlbumPhoto = component$<HeroParallaxScrollProps>(
           >
             <Image
               src={cdn + props.images[2]}
-              layout="constrained"
+              layout="constrained" height={700} width={800}
               class=" h-full w-auto  object-cover object-center shadow-2xl"
             />
           </div>

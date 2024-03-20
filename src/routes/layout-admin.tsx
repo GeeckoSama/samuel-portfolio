@@ -41,7 +41,7 @@ export default component$(() => {
   return (
     <>
       <AdminNavbar />
-      <main class="mt-14 min-h-screen bg-gray-200 py-4 dark:bg-gray-950">
+      <main class="mt-14 min-h-screen bg-base-200 py-4">
         {user.uid ? <Slot /> : <></>}
       </main>
     </>
