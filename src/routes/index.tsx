@@ -3,8 +3,8 @@ import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
-import type { Album, Photos } from "@libs/photo.type";
-import type { Videos } from "@libs/video.type";
+import type { Album } from "@libs/photo.type";
+import type { Video } from "@libs/video.type";
 import { collection, getDocs } from "firebase/firestore";
 import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
 import { firestore } from "~/libs/firebase";
@@ -21,55 +21,21 @@ export const useAlbums = routeLoader$(() => {
   };
 });
 
-export const useFakePhotos = routeLoader$(() => {
-  const photos: Photos = [
-    {
-      id: "1",
-      title: "test",
-      description: "test",
-      path: "https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg",
-      create_at: 0,
-      update_at: 0,
-    },
-  ];
-  return photos;
-});
-
-export const useFakeVideos = routeLoader$(() => {
-  const videos: Videos = [
-    {
-      id: "1",
-      title: "COLGATE & HOLD UP",
-      description: `Quatrième clip réalisé, une fois de plus avec Camille Pruvost, où
-      nous fonctionnons depuis en co-direction. Ce projet est le fruit d'une
-      rencontre avec Wana$, rappeur bordelais, qui voulait retranscrire son univers
-      musical avec une approche sensible et esthétique.
-      Le clip, comme le morceau en lui même, est composé de deux parties
-      distinctes, tout de même liées par les paroles, offrant deux ambiances
-      totalement différentes ; une idylle et onirique, puis un réveil brutal dans une
-      réalité plus sombre. Colgate, le soleil et la plage, Hold-Up, polar noir et nuit
-      sombre. La demande de l'artiste était de dépeindre deux séquences évoquées
-      dans son morceau, et les liaient par le visuel dans ce clip.
-      `,
-      credits: ["Réalisation : Samuel Freret & Camille Pruvost"],
-      localisations: ["Bordeaux"],
-      production_date: new Date().getTime(),
-      cover: "",
-      path: "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/colgate&holdup_preview.png",
-      svg_path:
-        "https://bfteqciwfomtgqrutgve.supabase.co/storage/v1/object/public/medias/photos/10000P_preview.png",
-      youtube_url: "https://www.youtube.com/watch?v=Z4j5rJQMd4c",
-      create_at: new Date().getTime(),
-      update_at: new Date().getTime(),
-    },
-  ];
-  return videos;
+export const useVideos = routeLoader$(() => {
+  return async () => {
+    const collectionRef = collection(firestore, "videos");
+    const videos = await getDocs(collectionRef).then((snapshot) => {
+      return snapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() } as Video;
+      });
+    });
+    return videos;
+  };
 });
 
 export default component$(() => {
-  //const signal = useFakePhotos();
   const albums = useAlbums();
-  const videos = useFakeVideos();
+  const videos = useVideos();
   return (
     <>
       <HeroList
@@ -105,7 +71,11 @@ export default component$(() => {
         )}
       />
 
-      <ImageSlideGallery videos={videos.value} />
+      <Resource
+        value={videos}
+        onResolved={(data) => <ImageSlideGallery videos={data} />}
+      />
+
       <ContactSection />
     </>
   );

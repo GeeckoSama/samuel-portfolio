@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { GlyphText } from "../ui/glyph-text";
 import { Link } from "@builder.io/qwik-city";
 import type { Video, Videos } from "@libs/video.type";
+import { Image } from "@unpic/qwik";
 
 export const ImageSlideGallery = component$<{ videos: Videos }>((props) => {
   return (
@@ -29,6 +30,7 @@ export interface ProjectProps {
 }
 
 export const Project = component$<{ video: Video }>((props) => {
+  const cdn = import.meta.env.PUBLIC_IMGIX_URL;
   const imgRef = useSignal<HTMLImageElement>();
 
   const handleMouseEnter = $(() => {
@@ -58,9 +60,11 @@ export const Project = component$<{ video: Video }>((props) => {
       </p>
 
       <div class="flex justify-center overflow-hidden">
-        <img
+        <Image
           ref={imgRef}
-          src={props.video.path}
+          src={cdn + props.video.cover}
+          alt={props.video.title}
+          layout="constrained"
           width={1740}
           height={1160}
           class="h-[7vw] w-0 shadow-md"
