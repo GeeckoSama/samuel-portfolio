@@ -1,18 +1,51 @@
-import { Resource, component$ } from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { ContactSection } from "@components/contact-section/contact-section";
 import { HeroList } from "@components/hero-list/hero-list";
 import { ImageSlideGallery } from "@components/image-slide-gallery/image-slide-gallery";
+import { collection, getDocs } from "firebase/firestore";
+import { parse, safeParse } from "valibot";
 import { SectionAlbumPhoto } from "~/components/section-album-photo/section-album-photo";
-import { useAlbums } from "@libs/album-loaders";
-import { useVideos } from "@libs/video-loaders";
-
-export { useAlbums } from "@libs/album-loaders";
-export { useVideos } from "@libs/video-loaders";
+import { firestore } from "~/libs/firebase";
+import type { Albums } from "~/libs/photo.type";
+import { AlbumShema, AlbumsShema } from "~/libs/photo.type";
+import type { Videos } from "~/libs/video.type";
+import { VideoShema, VideosShema } from "~/libs/video.type";
 
 export default component$(() => {
-  const albums = useAlbums();
-  const videos = useVideos();
+  const albums = useSignal<Albums>([]);
+  const videos = useSignal<Videos>([]);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const albumsRef = collection(firestore(), "albums");
+    const videosRef = collection(firestore(), "videos");
+    getDocs(albumsRef)
+      .then((snapshot) => {
+        const albumsData = safeParse(
+          AlbumsShema,
+          snapshot.docs.map((snap) =>
+            parse(AlbumShema, { id: snap.id, ...snap.data() }),
+          ),
+        );
+        if (albumsData.success) albums.value = albumsData.output;
+        else console.error(albumsData.issues);
+      })
+      .catch(console.error);
+
+    getDocs(videosRef)
+      .then((snapshot) => {
+        const videosData = safeParse(
+          VideosShema,
+          snapshot.docs.map((snap) =>
+            parse(VideoShema, { id: snap.id, ...snap.data() }),
+          ),
+        );
+        if (videosData.success) videos.value = videosData.output;
+        else console.error(videosData.issues);
+      })
+      .catch(console.error);
+  });
   return (
     <>
       <HeroList
@@ -32,29 +65,16 @@ export default component$(() => {
         ]}
         sectionTitle="Samuel freret"
       />
-      <Resource
-        value={albums}
-        onResolved={(data) => (
-          <>
-            {data &&
-              data.map((album) => (
-                <SectionAlbumPhoto
-                  key={album.id}
-                  title="Production photographique"
-                  subtitle={album.title}
-                  images={album.covers ?? []}
-                />
-              ))}
-          </>
-        )}
-        onRejected={(error) => <div>{error.message}</div>}
-      />
+      {albums.value.map((album) => (
+        <SectionAlbumPhoto
+          key={album.id}
+          title="Production photographique"
+          subtitle={album.title}
+          images={album.covers ?? []}
+        />
+      ))}
 
-      <Resource
-        value={videos}
-        onResolved={(data) => data && <ImageSlideGallery videos={data} />}
-        onRejected={(error) => <div>{error.message}</div>}
-      />
+      <ImageSlideGallery videos={videos.value} />
 
       <ContactSection />
     </>

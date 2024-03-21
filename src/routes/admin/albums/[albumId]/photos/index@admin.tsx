@@ -1,21 +1,26 @@
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useLocation } from "@builder.io/qwik-city";
 import { Table } from "@components/table/table";
 import { HiArrowLeftSolid } from "@qwikest/icons/heroicons";
-import { collection, onSnapshot } from "firebase/firestore";
-import { parse } from "valibot";
-import { useAlbumById } from "~/libs/album-loaders";
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { parse, safeParse } from "valibot";
 import { firestore } from "~/libs/firebase";
-import type { Photo, Photos } from "~/libs/photo.type";
-import { PhotoShema } from "~/libs/photo.type";
-
-export { useAlbumById } from "~/libs/album-loaders";
+import type { Album, Photo, Photos } from "~/libs/photo.type";
+import { AlbumShema, PhotoShema } from "~/libs/photo.type";
 
 export default component$(() => {
-  const album = useAlbumById();
+  const loc = useLocation();
+  const album = useSignal<Album>();
 
   const photos = useSignal<Photos>([]);
-  useTask$(({ cleanup }) => {
+  useTask$(async ({ cleanup }) => {
+    const albumId = loc.params.albumId;
+    if (!albumId) return;
+    const albumRef = doc(firestore(), `albums/${albumId}`);
+    const snap = await getDoc(albumRef);
+    const data = safeParse(AlbumShema, { id: snap.id, ...snap.data() });
+    if (data.success) album.value = data.output;
+    else console.error(data.issues);
     if (!album.value) return;
     const colRef = collection(firestore(), `albums/${album.value.id}/photos`);
     const unsubscribe = onSnapshot(colRef, (snap) => {

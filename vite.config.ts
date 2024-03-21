@@ -17,12 +17,8 @@ export default defineConfig((): UserConfig => {
       },
     },
     ssr: {
-      external: ['node:async_hooks', 'firebase-admin'],
+      external: ['node:async_hooks'],
     },
-    build: {
-      rollupOptions: {
-        external: ['firebase-admin'],
-      }
-    }
+    
   };
 });
