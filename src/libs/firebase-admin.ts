@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { isServer } from "@builder.io/qwik/build";
 import type { App, ServiceAccount } from "firebase-admin/app";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import type { Firestore } from "firebase-admin/firestore";
@@ -9,8 +8,6 @@ let _app!: App;
 let _firestore!: Firestore;
 
 export function initialiseAdmin(serviceAccount: ServiceAccount) {
-  if (!isServer)
-    console.error("Firebase Admin should be initialised on server only");
   if (_app) {
     return _app;
   }
