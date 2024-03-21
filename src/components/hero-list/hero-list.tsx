@@ -57,7 +57,7 @@ export const HeroList = component$<HeroListProps>((props) => {
               <Link key={i} href="#">
                 <div
                   onMouseOver$={() => handleHover(i)}
-                  class="cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] text-xl xl:text-2xl font-bold last-of-type:border-b dark:border-neutral-100"
+                  class="cursor-pointer items-center justify-center border-t border-neutral-950 pb-[0.8vw] pt-[0.8vw] text-xl font-bold last:border-b xl:text-2xl"
                 >
                   <GlyphText text={project.title} />
                 </div>
