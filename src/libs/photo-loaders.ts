@@ -1,6 +1,6 @@
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { parse, safeParse } from "valibot";
-import { adminFirestore } from "./firebase-admin";
+import { getAdminFirestore } from "./firebase-admin";
 import type { Photo } from "./photo.type";
 import { PhotoShema } from "./photo.type";
 
@@ -15,7 +15,7 @@ export const usePhotoById = routeLoader$(async (requestEvent) => {
     if (!photoId) {
       requestEvent.fail(404, { error: "No photoId provided" });
     }
-    const snap = await adminFirestore
+    const snap = await getAdminFirestore()
       .doc(`albums/${albumId}/photos/${photoId}`)
       .get();
     if (!snap.exists) {
@@ -37,7 +37,7 @@ export const usePhotos = routeLoader$((requestEvent) => {
       if (!albumId) {
         requestEvent.fail(404, { error: "No albumId provided" });
       }
-      const snaps = await adminFirestore
+      const snaps = await getAdminFirestore()
         .collection(`albums/${albumId}/photos`)
         .get();
       return snaps.docs.map((snap) => {
