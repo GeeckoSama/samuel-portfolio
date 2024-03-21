@@ -44,7 +44,7 @@ export default component$(() => {
   const handleSubmit: QRL<SubmitHandler<AlbumForm>> = $(async (values) => {
     loading.value = true;
     console.log("Start creating album");
-    const albumsRef = collection(firestore, "albums");
+    const albumsRef = collection(firestore(), "albums");
     addDoc(albumsRef, {
       ...values,
       create_at: Date.now(),

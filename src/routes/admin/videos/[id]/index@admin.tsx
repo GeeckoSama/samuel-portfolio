@@ -52,7 +52,7 @@ export const useFormLoader = routeLoader$<InitialValues<VideoForm>>(
   async (requestEvent) => {
     const id = requestEvent.params.id;
     if (!id) throw new Error("Missing id");
-    const docRef = doc(firestore, `videos/${id}`);
+    const docRef = doc(firestore(), `videos/${id}`);
     const snapshot = await getDoc(docRef);
     if (!snapshot.exists()) throw new Error("Document does not exist");
     const video = { id: snapshot.id, ...snapshot.data() } as Video;
@@ -93,7 +93,7 @@ export default component$(() => {
         uploads.push(null);
       } else {
         const coverRef = ref(
-          storage,
+          storage(),
           `videos/${values.title}/${values.cover.item.name}`,
         );
         uploads.push(uploadBytes(coverRef, values.cover.item));
@@ -105,7 +105,7 @@ export default component$(() => {
         uploads.push(null);
       } else {
         const pathRef = ref(
-          storage,
+          storage(),
           `videos/${values.title}/${values.path.item.name}`,
         );
         uploads.push(uploadBytes(pathRef, values.path.item));
@@ -117,7 +117,7 @@ export default component$(() => {
         uploads.push(null);
       } else {
         const svgRef = ref(
-          storage,
+          storage(),
           `videos/${values.title}/${values.svg_path.item.name}`,
         );
         uploads.push(uploadBytes(svgRef, values.svg_path.item));
@@ -130,7 +130,7 @@ export default component$(() => {
       }
       console.log(cover, path, svg);
 
-      const videoRef = doc(firestore, `videos/${values.id}`);
+      const videoRef = doc(firestore(), `videos/${values.id}`);
       await updateDoc(videoRef, {
         title: values.title,
         description: values.description,

@@ -43,8 +43,7 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (!auth) return;
-    getRedirectResult(auth).then((result) => {
+    getRedirectResult(auth()).then((result) => {
       if (result) {
         console.log("User signed in with redirect");
         nav("/admin");
@@ -53,10 +52,9 @@ export default component$(() => {
   });
 
   const handleSubmit = $<SubmitHandler<LoginForm>>((values) => {
-    // Runs on client
-    if (!auth) return;
+    if (isServer) return;
     console.log("values", values);
-    signInWithEmailAndPassword(auth, values.email, values.password)
+    signInWithEmailAndPassword(auth(), values.email, values.password)
       .then(() => {
         console.log("User signed in");
         nav("/admin");
@@ -68,11 +66,13 @@ export default component$(() => {
 
   const handleSigninWithGoogle = $(() => {
     console.log("Signin with Google");
-    if (!auth || isServer) return;
+    if (isServer) return;
     if (window.innerWidth < 768) {
-      signInWithRedirect(auth, new GoogleAuthProvider());
+      signInWithRedirect(auth(), new GoogleAuthProvider());
     } else {
-      signInWithPopup(auth, new GoogleAuthProvider()).then(() => nav("/admin"));
+      signInWithPopup(auth(), new GoogleAuthProvider()).then(() =>
+        nav("/admin"),
+      );
     }
   });
 

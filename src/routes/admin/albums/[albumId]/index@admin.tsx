@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import type { QRL } from "@builder.io/qwik";
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
@@ -41,7 +42,7 @@ export type AlbumForm = Input<typeof AlbumSchema>;
 
 export const useFormLoader = routeLoader$<InitialValues<AlbumForm>>(
   async (requestEvent) => {
-    const docRef = doc(firestore, "albums", requestEvent.params.albumId);
+    const docRef = doc(firestore(), "albums", requestEvent.params.albumId);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
       const data = snapshot.data();
@@ -65,7 +66,7 @@ export const useFormLoader = routeLoader$<InitialValues<AlbumForm>>(
 
 export const usePhotos = routeLoader$(async (requestEvent) => {
   const photosRef = collection(
-    firestore,
+    firestore(),
     `albums/${requestEvent.params.albumId}/photos`,
   );
   return await getDocs(photosRef).then((snapshot) =>
@@ -89,7 +90,7 @@ export default component$(() => {
     try {
       console.log("Start updating album ", values.id);
       console.log("values", values);
-      const albumsRef = doc(firestore, `albums/${values.id}`);
+      const albumsRef = doc(firestore(), `albums/${values.id}`);
       await updateDoc(albumsRef, {
         title: values.title,
         description: values.description,

@@ -73,7 +73,7 @@ export default component$(() => {
       if (!values.cover.item)
         throw new Error("Aucune couverture n'a été sélectionnée");
       const coverRef = ref(
-        storage,
+        storage(),
         `videos/${values.title}/${values.cover.item.name}`,
       );
       uploads.push(uploadBytes(coverRef, values.cover.item));
@@ -81,7 +81,7 @@ export default component$(() => {
       if (!values.path.item)
         throw new Error("Aucune vidéo n'a été sélectionnée");
       const pathRef = ref(
-        storage,
+        storage(),
         `videos/${values.title}/${values.path.item.name}`,
       );
       uploads.push(uploadBytes(pathRef, values.path.item));
@@ -89,7 +89,7 @@ export default component$(() => {
       if (!values.svg_path.item)
         throw new Error("Aucun svg n'a été sélectionné");
       const svgRef = ref(
-        storage,
+        storage(),
         `videos/${values.title}/${values.svg_path.item.name}`,
       );
       uploads.push(uploadBytes(svgRef, values.svg_path.item));
@@ -98,7 +98,7 @@ export default component$(() => {
       const videoUrl = await getDownloadURL(path.ref);
       console.log(cover, path, svg);
 
-      const videoRef = collection(firestore, "videos");
+      const videoRef = collection(firestore(), "videos");
       await addDoc(videoRef, {
         title: values.title,
         description: values.description,

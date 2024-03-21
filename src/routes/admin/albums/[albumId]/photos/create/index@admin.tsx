@@ -52,10 +52,13 @@ export default component$(() => {
       if (!values.file.item)
         throw new Error("Aucun fichier n'a été sélectionné");
       const filePath = `albums/${albumId.value}/${values.file.item.name}`;
-      const storageRef = ref(storage, filePath);
+      const storageRef = ref(storage(), filePath);
       const uploadedFile = await uploadBytes(storageRef, values.file.item);
       console.log(uploadedFile);
-      const imageRef = collection(firestore, `albums/${albumId.value}/photos`);
+      const imageRef = collection(
+        firestore(),
+        `albums/${albumId.value}/photos`,
+      );
       const result = await addDoc(imageRef, {
         title: values.title,
         description: values.description,

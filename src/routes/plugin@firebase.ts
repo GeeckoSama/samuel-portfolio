@@ -24,7 +24,7 @@ export const onRequest: RequestHandler = async ({ env }) => {
       process.env.clientX509CertUrl,
     universe_domain: "googleapis.com",
   } as ServiceAccount;
-  console.log("serviceAccount", serviceAccount);
+  //console.log("serviceAccount", serviceAccount);
 
   initialiseAdmin(serviceAccount);
 };

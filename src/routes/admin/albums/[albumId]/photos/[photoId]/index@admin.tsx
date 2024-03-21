@@ -30,7 +30,7 @@ export type PhotoEditForm = Input<typeof PhotoEditSchema>;
 export const useFormLoader = routeLoader$(async (requestEvent) => {
   const albumId = requestEvent.params.albumId;
   const photoId = requestEvent.params.photoId;
-  const docRef = doc(firestore, `albums/${albumId}/photos/${photoId}`);
+  const docRef = doc(firestore(), `albums/${albumId}/photos/${photoId}`);
   const snapshot = await getDoc(docRef);
   if (snapshot.exists()) {
     return {
@@ -73,15 +73,15 @@ export default component$(() => {
     try {
       if (values.file.item) {
         const filePath = `albums/${albumId.value}/${values.file.item.name}`;
-        const storageRef = ref(storage, filePath);
+        const storageRef = ref(storage(), filePath);
         await uploadBytes(storageRef, values.file.item);
-        const deleteRef = ref(storage, values.path);
+        const deleteRef = ref(storage(), values.path);
         await deleteObject(deleteRef);
         values.path = filePath;
       }
 
       const imageRef = doc(
-        firestore,
+        firestore(),
         `albums/${albumId.value}/photos/${values.id}`,
       );
       await updateDoc(imageRef, {
