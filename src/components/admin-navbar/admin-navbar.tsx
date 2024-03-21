@@ -9,8 +9,7 @@ export const AdminNavbar = component$(() => {
   const nav = useNavigate();
 
   const handleSignOut = $(() => {
-    if (!auth) return;
-    signOut(auth).then(() => {
+    signOut(auth()).then(() => {
       nav("/sigin");
     });
   });

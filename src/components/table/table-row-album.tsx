@@ -7,7 +7,7 @@ import { firestore } from "~/libs/firebase";
 
 export const TableRowAlbum = component$<{ albums: Albums }>((props) => {
   const getPhotosNumber = async (album: Album) => {
-    const collectionRef = collection(firestore, `albums/${album.id}/photos`);
+    const collectionRef = collection(firestore(), `albums/${album.id}/photos`);
     return getDocs(collectionRef).then((snapshot) => {
       return snapshot.size;
     });
