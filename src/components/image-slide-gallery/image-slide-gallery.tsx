@@ -1,4 +1,4 @@
-import { $, component$, useSignal } from "@builder.io/qwik";
+import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { gsap } from "gsap";
 import { GlyphText } from "../ui/glyph-text";
 import { Link } from "@builder.io/qwik-city";
@@ -33,6 +33,14 @@ export const Project = component$<{ video: Video }>((props) => {
   const cdn = import.meta.env.PUBLIC_IMGIX_URL;
   const imgRef = useSignal<HTMLImageElement>();
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    gsap.to(imgRef.value!, {
+      width: 0,
+      duration: 0,
+    });
+  });
+
   const handleMouseEnter = $(() => {
     gsap.to(imgRef.value!, {
       width: "auto",
@@ -65,8 +73,8 @@ export const Project = component$<{ video: Video }>((props) => {
           src={cdn + props.video.cover}
           alt={props.video.title}
           layout="constrained"
-          width={1740}
-          height={1160}
+          width={500}
+          height={250}
           class="h-[7vw] w-0 shadow-md"
         />
       </div>
