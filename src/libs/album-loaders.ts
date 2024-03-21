@@ -2,7 +2,8 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import { parse, safeParse } from "valibot";
 import type { Album } from "./photo.type";
 import { AlbumShema } from "./photo.type";
-import { getAdminFirestore } from "./firebase-admin";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { firestore } from "./firebase";
 
 // eslint-disable-next-line qwik/loader-location
 export const useAlbumById = routeLoader$(async (requestEvent) => {
@@ -11,8 +12,9 @@ export const useAlbumById = routeLoader$(async (requestEvent) => {
     if (!albumId) {
       requestEvent.fail(404, { error: "No albumId provided" });
     }
-    const snap = await getAdminFirestore().doc(`albums/${albumId}`).get();
-    if (!snap.exists) {
+    const docRef = doc(firestore(), `albums/${albumId}`);
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) {
       requestEvent.fail(404, { error: "No album found" });
     }
     const result = safeParse(AlbumShema, { id: snap.id, ...snap.data() });
@@ -27,7 +29,8 @@ export const useAlbumById = routeLoader$(async (requestEvent) => {
 export const useAlbums = routeLoader$((requestEvent) => {
   return async () => {
     try {
-      const snaps = await getAdminFirestore().collection("albums").get();
+      const colRef = collection(firestore(), "albums");
+      const snaps = await getDocs(colRef);
       return snaps.docs.map((snap) => {
         return parse(AlbumShema, {
           id: snap.id,

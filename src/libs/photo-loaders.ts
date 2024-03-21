@@ -1,8 +1,9 @@
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { parse, safeParse } from "valibot";
-import { getAdminFirestore } from "./firebase-admin";
 import type { Photo } from "./photo.type";
 import { PhotoShema } from "./photo.type";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { firestore } from "./firebase";
 
 // eslint-disable-next-line qwik/loader-location
 export const usePhotoById = routeLoader$(async (requestEvent) => {
@@ -15,10 +16,9 @@ export const usePhotoById = routeLoader$(async (requestEvent) => {
     if (!photoId) {
       requestEvent.fail(404, { error: "No photoId provided" });
     }
-    const snap = await getAdminFirestore()
-      .doc(`albums/${albumId}/photos/${photoId}`)
-      .get();
-    if (!snap.exists) {
+    const docRef = doc(firestore(), `albums/${albumId}/photos/${photoId}`);
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) {
       requestEvent.fail(404, { error: "No photo found" });
     }
     const result = safeParse(PhotoShema, { id: snap.id, ...snap.data() });
@@ -37,9 +37,8 @@ export const usePhotos = routeLoader$((requestEvent) => {
       if (!albumId) {
         requestEvent.fail(404, { error: "No albumId provided" });
       }
-      const snaps = await getAdminFirestore()
-        .collection(`albums/${albumId}/photos`)
-        .get();
+      const colRef = collection(firestore(), `albums/${albumId}/photos`);
+      const snaps = await getDocs(colRef);
       return snaps.docs.map((snap) => {
         return parse(PhotoShema, {
           id: snap.id,
