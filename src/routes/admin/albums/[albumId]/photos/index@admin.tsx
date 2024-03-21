@@ -1,16 +1,34 @@
-import { Resource, component$ } from "@builder.io/qwik";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { Table } from "@components/table/table";
 import { HiArrowLeftSolid } from "@qwikest/icons/heroicons";
+import { collection, onSnapshot } from "firebase/firestore";
+import { parse } from "valibot";
 import { useAlbumById } from "~/libs/album-loaders";
-import { usePhotos } from "~/libs/photo-loaders";
+import { firestore } from "~/libs/firebase";
+import type { Photo, Photos } from "~/libs/photo.type";
+import { PhotoShema } from "~/libs/photo.type";
 
 export { useAlbumById } from "~/libs/album-loaders";
-export { usePhotos } from "~/libs/photo-loaders";
 
 export default component$(() => {
   const album = useAlbumById();
-  const photos = usePhotos();
+
+  const photos = useSignal<Photos>([]);
+  useTask$(({ cleanup }) => {
+    if (!album.value) return;
+    const colRef = collection(firestore(), `albums/${album.value.id}/photos`);
+    const unsubscribe = onSnapshot(colRef, (snap) => {
+      console.log("snap size : ", snap.size);
+      photos.value = snap.docs.map((doc) => {
+        return parse(PhotoShema, { id: doc.id, ...doc.data() }) as Photo;
+      });
+    });
+
+    cleanup(() => {
+      unsubscribe();
+    });
+  });
   return (
     <div class="card mx-auto max-w-7xl bg-base-100 shadow-md">
       <div class="card-body">
@@ -20,11 +38,7 @@ export default component$(() => {
           </Link>
           <h2 class="card-title">Photos de l'album {album.value?.title}</h2>
         </div>
-        <Resource
-          value={photos}
-          onResolved={(data) => <Table photos={data} />}
-          onPending={() => <div class="loading-spinner">Loading...</div>}
-        />
+        <Table photos={photos.value} />
       </div>
     </div>
   );
